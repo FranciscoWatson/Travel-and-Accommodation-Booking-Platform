@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TABP.API", "TABP.API\TABP.API.csproj", "{11262BBB-7218-49DB-AD0F-8CF787440F15}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TABP.Domain", "TABP.Domain\TABP.Domain.csproj", "{DE71BC86-7F24-476F-AD76-CA5D60200AF3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{11262BBB-7218-49DB-AD0F-8CF787440F15}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{11262BBB-7218-49DB-AD0F-8CF787440F15}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{11262BBB-7218-49DB-AD0F-8CF787440F15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE71BC86-7F24-476F-AD76-CA5D60200AF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE71BC86-7F24-476F-AD76-CA5D60200AF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE71BC86-7F24-476F-AD76-CA5D60200AF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE71BC86-7F24-476F-AD76-CA5D60200AF3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
