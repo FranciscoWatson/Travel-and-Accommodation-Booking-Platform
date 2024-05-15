@@ -41,6 +41,87 @@ public class TabpDbContext : DbContext
         modelBuilder.Entity<Room>()
             .Property(r => r.Price)
             .HasColumnType("decimal(18,2)");
+        
+        
+         modelBuilder.Entity<Amenity>()
+        .Property(a => a.AmenityId)
+        .HasDefaultValueSql("NEWID()")
+        .ValueGeneratedOnAdd();
+
+    modelBuilder.Entity<Booking>()
+        .Property(b => b.BookingId)
+        .HasDefaultValueSql("NEWID()")
+        .ValueGeneratedOnAdd();
+
+    modelBuilder.Entity<City>()
+        .Property(c => c.CityId)
+        .HasDefaultValueSql("NEWID()")
+        .ValueGeneratedOnAdd();
+
+    modelBuilder.Entity<Country>()
+        .Property(c => c.CountryId)
+        .HasDefaultValueSql("NEWID()")
+        .ValueGeneratedOnAdd();
+
+    modelBuilder.Entity<Hotel>()
+        .Property(h => h.HotelId)
+        .HasDefaultValueSql("NEWID()")
+        .ValueGeneratedOnAdd();
+
+    modelBuilder.Entity<HotelDiscount>()
+        .Property(hd => hd.HotelDiscountId)
+        .HasDefaultValueSql("NEWID()")
+        .ValueGeneratedOnAdd();
+
+    modelBuilder.Entity<HotelImage>()
+        .Property(hi => hi.HotelImageId)
+        .HasDefaultValueSql("NEWID()")
+        .ValueGeneratedOnAdd();
+
+    modelBuilder.Entity<Owner>()
+        .Property(o => o.OwnerId)
+        .HasDefaultValueSql("NEWID()")
+        .ValueGeneratedOnAdd();
+
+    modelBuilder.Entity<Payment>()
+        .Property(p => p.PaymentId)
+        .HasDefaultValueSql("NEWID()")
+        .ValueGeneratedOnAdd();
+
+    modelBuilder.Entity<Review>()
+        .Property(r => r.ReviewId)
+        .HasDefaultValueSql("NEWID()")
+        .ValueGeneratedOnAdd();
+
+    modelBuilder.Entity<Room>()
+        .Property(r => r.RoomId)
+        .HasDefaultValueSql("NEWID()")
+        .ValueGeneratedOnAdd();
+
+    modelBuilder.Entity<RoomDiscount>()
+        .Property(rd => rd.RoomDiscountId)
+        .HasDefaultValueSql("NEWID()")
+        .ValueGeneratedOnAdd();
+
+    modelBuilder.Entity<RoomImage>()
+        .Property(ri => ri.RoomImageId)
+        .HasDefaultValueSql("NEWID()")
+        .ValueGeneratedOnAdd();
+
+    modelBuilder.Entity<RoomType>()
+        .Property(rt => rt.RoomTypeId)
+        .HasDefaultValueSql("NEWID()")
+        .ValueGeneratedOnAdd();
+
+    modelBuilder.Entity<User>()
+        .Property(u => u.UserId)
+        .HasDefaultValueSql("NEWID()")
+        .ValueGeneratedOnAdd();
+
+    modelBuilder.Entity<UserRole>()
+        .Property(ur => ur.UserRoleId)
+        .HasDefaultValueSql("NEWID()")
+        .ValueGeneratedOnAdd();
     }
     
     
