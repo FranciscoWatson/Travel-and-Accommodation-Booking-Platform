@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TABP.API", "TABP.API\TABP.A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TABP.Domain", "TABP.Domain\TABP.Domain.csproj", "{DE71BC86-7F24-476F-AD76-CA5D60200AF3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TABP.Infrastructure", "TABP.Infrastructure\TABP.Infrastructure.csproj", "{D68B3791-3279-4BFC-B411-CEFAE2D8A881}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{DE71BC86-7F24-476F-AD76-CA5D60200AF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE71BC86-7F24-476F-AD76-CA5D60200AF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DE71BC86-7F24-476F-AD76-CA5D60200AF3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D68B3791-3279-4BFC-B411-CEFAE2D8A881}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D68B3791-3279-4BFC-B411-CEFAE2D8A881}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D68B3791-3279-4BFC-B411-CEFAE2D8A881}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D68B3791-3279-4BFC-B411-CEFAE2D8A881}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
