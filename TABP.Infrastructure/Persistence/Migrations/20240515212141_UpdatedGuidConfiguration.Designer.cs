@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TABP.Infrastructure.Persistance;
 
@@ -11,9 +12,11 @@ using TABP.Infrastructure.Persistance;
 namespace TABP.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(TabpDbContext))]
-    partial class TabpDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240515212141_UpdatedGuidConfiguration")]
+    partial class UpdatedGuidConfiguration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
