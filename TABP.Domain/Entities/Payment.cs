@@ -2,7 +2,7 @@
 
 namespace TABP.Domain.Entities;
 
-public class Payment
+public class Payment : AuditableEntity
 {
     public Guid PaymentId { get; set; }
     public Guid BookingId { get; set; }

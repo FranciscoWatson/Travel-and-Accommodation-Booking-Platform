@@ -1,6 +1,6 @@
 ﻿namespace TABP.Domain.Entities;
 
-public class Room
+public class Room : AuditableEntity
 {
     public Guid RoomId { get; set; }
     public Guid RoomTypeId { get; set; }
