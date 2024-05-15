@@ -1,4 +1,4 @@
-using TABP.Infrastructure.Persistance;
+using TABP.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 

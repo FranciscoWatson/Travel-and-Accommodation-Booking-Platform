@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TABP.Domain.Entities;
 
-namespace TABP.Infrastructure.Persistance;
+namespace TABP.Infrastructure.Persistence;
 
 public class TabpDbContext : DbContext
 {

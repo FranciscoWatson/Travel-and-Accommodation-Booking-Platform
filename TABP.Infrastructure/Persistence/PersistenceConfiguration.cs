@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace TABP.Infrastructure.Persistance;
+namespace TABP.Infrastructure.Persistence;
 
 public static class PersistenceConfiguration
 {
