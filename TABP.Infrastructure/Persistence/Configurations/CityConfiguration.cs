@@ -11,5 +11,7 @@ public class CityConfiguration : IEntityTypeConfiguration<City>
         builder.Property(c => c.CityId)
             .HasDefaultValueSql("NEWID()")
             .ValueGeneratedOnAdd();
+        builder.Property(c => c.Name).HasMaxLength(100);
+        builder.Property(c => c.Description).HasMaxLength(300);
     }
 }

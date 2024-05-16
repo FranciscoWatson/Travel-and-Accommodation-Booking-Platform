@@ -11,5 +11,7 @@ public class AmenityConfiguration : IEntityTypeConfiguration<Amenity>
         builder.Property(a => a.AmenityId)
             .HasDefaultValueSql("NEWID()")
             .ValueGeneratedOnAdd();
+        builder.Property(a => a.Name).HasMaxLength(100);
+        builder.Property(a => a.Description).HasMaxLength(500);
     }
 }

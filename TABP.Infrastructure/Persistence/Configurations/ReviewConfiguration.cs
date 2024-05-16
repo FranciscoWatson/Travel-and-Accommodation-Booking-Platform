@@ -11,5 +11,7 @@ public class ReviewConfiguration : IEntityTypeConfiguration<Review>
         builder.Property(r => r.ReviewId)
             .HasDefaultValueSql("NEWID()")
             .ValueGeneratedOnAdd();
+
+        builder.Property(r => r.Content).HasMaxLength(1000);
     }
 }

@@ -11,5 +11,6 @@ public class UserRoleConfiguration : IEntityTypeConfiguration<UserRole>
         builder.Property(ur => ur.UserRoleId)
             .HasDefaultValueSql("NEWID()")
             .ValueGeneratedOnAdd();
+        builder.Property(ur => ur.Name).HasMaxLength(100);
     }
 }

@@ -11,5 +11,7 @@ public class HotelDiscountConfiguration : IEntityTypeConfiguration<HotelDiscount
         builder.Property(hd => hd.HotelDiscountId)
             .HasDefaultValueSql("NEWID()")
             .ValueGeneratedOnAdd();
+        builder.Property(hd => hd.StartDate).HasColumnType("datetime2");
+        builder.Property(hd => hd.EndDate).HasColumnType("datetime2");
     }
 }

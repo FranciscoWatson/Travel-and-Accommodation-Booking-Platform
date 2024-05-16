@@ -11,5 +11,8 @@ public class RoomDiscountConfiguration : IEntityTypeConfiguration<RoomDiscount>
         builder.Property(rd => rd.RoomDiscountId)
             .HasDefaultValueSql("NEWID()")
             .ValueGeneratedOnAdd();
+        
+        builder.Property(rd => rd.StartDate).HasColumnType("datetime2");
+        builder.Property(rd => rd.EndDate).HasColumnType("datetime2");
     }
 }

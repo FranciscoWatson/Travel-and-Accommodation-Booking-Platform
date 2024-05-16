@@ -14,5 +14,7 @@ public class PaymentConfiguration : IEntityTypeConfiguration<Payment>
         
         builder.Property(p => p.Amount)
             .HasColumnType("decimal(18,2)");
+        
+        builder.Property(p => p.PaymentDate).HasColumnType("datetime2");
     }
 }

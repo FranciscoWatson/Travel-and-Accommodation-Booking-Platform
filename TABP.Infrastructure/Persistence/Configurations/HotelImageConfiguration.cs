@@ -11,5 +11,6 @@ public class HotelImageConfiguration : IEntityTypeConfiguration<HotelImage>
         builder.Property(hi => hi.HotelImageId)
             .HasDefaultValueSql("NEWID()")
             .ValueGeneratedOnAdd();
+        builder.Property(hi => hi.Url).HasMaxLength(500);
     }
 }

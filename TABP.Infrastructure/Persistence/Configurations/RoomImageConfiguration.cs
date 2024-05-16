@@ -11,5 +11,6 @@ public class RoomImageConfiguration : IEntityTypeConfiguration<RoomImage>
         builder.Property(ri => ri.RoomImageId)
             .HasDefaultValueSql("NEWID()")
             .ValueGeneratedOnAdd();
+        builder.Property(ri => ri.Url).HasMaxLength(500);
     }
 }

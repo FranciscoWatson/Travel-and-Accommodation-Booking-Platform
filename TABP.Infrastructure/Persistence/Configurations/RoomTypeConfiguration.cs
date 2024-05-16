@@ -11,5 +11,7 @@ public class RoomTypeConfiguration : IEntityTypeConfiguration<RoomType>
         builder.Property(rt => rt.RoomTypeId)
             .HasDefaultValueSql("NEWID()")
             .ValueGeneratedOnAdd();
+        builder.Property(rt => rt.Name).HasMaxLength(100);
+        builder.Property(rt => rt.Description).HasMaxLength(500);
     }
 }

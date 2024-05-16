@@ -11,5 +11,8 @@ public class CountryConfiguration : IEntityTypeConfiguration<Country>
         builder.Property(c => c.CountryId)
             .HasDefaultValueSql("NEWID()")
             .ValueGeneratedOnAdd();
+        builder.Property(co => co.Name).HasMaxLength(100);
+        builder.Property(co => co.Code).HasMaxLength(10);
+        builder.Property(co => co.Description).HasMaxLength(500);
     }
 }
