@@ -17,7 +17,6 @@ public class Hotel : AuditableEntity
     public City City { get; set; }
     public Owner Owner { get; set; }
     public List<Amenity> Amenities { get; set; }
-    public List<HotelDiscount> HotelDiscounts { get; set; }
     public List<Room> Rooms { get; set; }
     public List<Review> Reviews { get; set; }
     public List<HotelImage> HotelImages { get; set; }
