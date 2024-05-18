@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TABP.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using TABP.Infrastructure.Persistence;
 namespace TABP.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(TabpDbContext))]
-    partial class TabpDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240518155450_UpdateDatabaseRelationships")]
+    partial class UpdateDatabaseRelationships
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -416,17 +419,14 @@ namespace TABP.Infrastructure.Persistence.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("NEWID()");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<float>("Percentage")
                         .HasColumnType("real");
+
+                    b.Property<Guid?>("RoomId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("RoomTypeId")
                         .HasColumnType("uniqueidentifier");
@@ -435,6 +435,8 @@ namespace TABP.Infrastructure.Persistence.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("RoomDiscountId");
+
+                    b.HasIndex("RoomId");
 
                     b.HasIndex("RoomTypeId");
 
@@ -694,6 +696,10 @@ namespace TABP.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("TABP.Domain.Entities.RoomDiscount", b =>
                 {
+                    b.HasOne("TABP.Domain.Entities.Room", null)
+                        .WithMany("RoomDiscounts")
+                        .HasForeignKey("RoomId");
+
                     b.HasOne("TABP.Domain.Entities.RoomType", "RoomType")
                         .WithMany()
                         .HasForeignKey("RoomTypeId")
@@ -726,6 +732,11 @@ namespace TABP.Infrastructure.Persistence.Migrations
                     b.Navigation("Reviews");
 
                     b.Navigation("Rooms");
+                });
+
+            modelBuilder.Entity("TABP.Domain.Entities.Room", b =>
+                {
+                    b.Navigation("RoomDiscounts");
                 });
 
             modelBuilder.Entity("TABP.Domain.Entities.User", b =>

@@ -14,7 +14,6 @@ public class TabpDbContext : DbContext
     public DbSet<City> Cities { get; set; }
     public DbSet<Country> Countries { get; set; }
     public DbSet<Hotel> Hotels { get; set; }
-    public DbSet<HotelDiscount> HotelDiscounts { get; set; }
     public DbSet<HotelImage> HotelImages { get; set; }
     public DbSet<Owner> Owners { get; set; }
     public DbSet<Payment> Payments { get; set; }
