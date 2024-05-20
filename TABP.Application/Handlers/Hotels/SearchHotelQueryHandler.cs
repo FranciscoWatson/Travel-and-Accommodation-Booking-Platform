@@ -21,6 +21,5 @@ public class SearchHotelQueryHandler : IRequestHandler<SearchHotelQuery, List<Ho
     {
         var hotels = await _hotelRepository.SearchHotelsAsync(request);
         return _mapper.Map<List<HotelSearchResponseDto>>(hotels);
-        
     }
 }

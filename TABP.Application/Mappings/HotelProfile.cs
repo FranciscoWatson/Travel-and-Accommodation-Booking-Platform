@@ -1,5 +1,6 @@
 using AutoMapper;
 using TABP.Application.DTOs.HotelDTOs;
+using TABP.Application.Queries.Hotels;
 using TABP.Domain.Entities;
 
 namespace TABP.Application.Mappings;
@@ -14,5 +15,7 @@ public class HotelProfile : Profile
         
         CreateMap<Hotel, HotelSearchResponseDto>()
             .ForMember(dto => dto.CityName, opt => opt.MapFrom(h => h.City.Name));
+        
+        CreateMap<SearchHotelRequestDto, SearchHotelQuery>().ReverseMap();
     }
 }
