@@ -11,5 +11,8 @@ public class HotelProfile : Profile
         CreateMap<Hotel, HotelFullDetailsDto>()
             .ForMember(dto => dto.CityName, opt => opt.MapFrom(h => h.City.Name))
             .ForMember(dto => dto.OwnerName, opt => opt.MapFrom(h=> h.Owner.FirstName + " " + h.Owner.LastName));
+        
+        CreateMap<Hotel, HotelSearchResponseDto>()
+            .ForMember(dto => dto.CityName, opt => opt.MapFrom(h => h.City.Name));
     }
 }
