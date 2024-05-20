@@ -9,6 +9,6 @@ public class Booking : AuditableEntity
     public decimal PriceAtBooking { get; set; }
     
     public Payment? Payment { get; set; }
-    public User User { get; set; }
-    public List<Room> Rooms { get; set; }
+    public User User { get; set; } 
+    public List<BookingRoom> BookingRooms { get; set; }
 }

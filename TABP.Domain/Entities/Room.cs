@@ -12,6 +12,6 @@ public class Room : AuditableEntity
     
     public Hotel Hotel { get; set; }
     public RoomType RoomType { get; set; }
-    public List<RoomImage> RoomImages { get; set; }
-    public List<Booking> Bookings { get; set; }
+    public List<RoomRoomImage> RoomRoomImages { get; set; }
+    public List<BookingRoom> BookingRooms { get; set; }
 }
