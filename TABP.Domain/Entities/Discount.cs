@@ -1,8 +1,8 @@
 ﻿namespace TABP.Domain.Entities;
 
-public class RoomDiscount : AuditableEntity
+public class Discount : AuditableEntity
 {
-    public Guid RoomDiscountId { get; set; }
+    public Guid DiscountId { get; set; }
     public Guid RoomTypeId { get; set; }
     public float Percentage { get; set; }
     public DateTime StartDate { get; set; }

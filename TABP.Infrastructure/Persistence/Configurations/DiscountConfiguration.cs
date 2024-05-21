@@ -4,11 +4,11 @@ using TABP.Domain.Entities;
 
 namespace TABP.Infrastructure.Persistence.Configurations;
 
-public class RoomDiscountConfiguration : IEntityTypeConfiguration<RoomDiscount>
+public class DiscountConfiguration : IEntityTypeConfiguration<Discount>
 {
-    public void Configure(EntityTypeBuilder<RoomDiscount> builder)
+    public void Configure(EntityTypeBuilder<Discount> builder)
     {
-        builder.Property(rd => rd.RoomDiscountId)
+        builder.Property(rd => rd.DiscountId)
             .HasDefaultValueSql("NEWID()")
             .ValueGeneratedOnAdd();
         

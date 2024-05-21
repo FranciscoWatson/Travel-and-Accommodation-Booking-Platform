@@ -28,7 +28,7 @@ public static class PersistenceConfiguration
         services.AddScoped<IOwnerRepository , OwnerRepository>();
         services.AddScoped<IPaymentRepository , PaymentRepository>();
         services.AddScoped<IReviewRepository , ReviewRepository>();
-        services.AddScoped<IRoomDiscountRepository , RoomDiscountRepository>();
+        services.AddScoped<IDiscountRepository , DiscountRepository>();
         services.AddScoped<IRoomImageRepository , RoomImageRepository>();
         services.AddScoped<IRoomRepository , RoomRepository>();
         services.AddScoped<IRoomTypeRepository , RoomTypeRepository>();
