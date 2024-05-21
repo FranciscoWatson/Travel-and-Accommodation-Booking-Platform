@@ -21,10 +21,10 @@ public class HotelsController : ControllerBase
     
     [HttpGet]
     public async Task<ActionResult<IEnumerable<HotelSearchResponseDto>>> SearchHotels(
-        [FromQuery] SearchHotelRequestDto searchHotelRequest,
+        [FromQuery] SearchAndFilterHotelsRequestDto searchAndFilterHotelsRequest,
         CancellationToken cancellationToken = default)
     {
-        var query = _mapper.Map<SearchHotelQuery>(searchHotelRequest);
+        var query = _mapper.Map<SearchAndFilterHotelsQuery>(searchAndFilterHotelsRequest);
         
         var hotels = await _mediator.Send(query, cancellationToken);
         

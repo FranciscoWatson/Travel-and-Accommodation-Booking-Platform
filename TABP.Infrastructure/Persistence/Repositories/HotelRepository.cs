@@ -36,45 +36,6 @@ public class HotelRepository : IHotelRepository
             .ToListAsync();
     }
     
-    public async Task<List<Hotel>> SearchHotelsAsync(SearchHotelQuery request)
-    {
-        IQueryable<Hotel> query = _context.Hotels
-            .Include(h => h.HotelImages)
-            .Include(h => h.City)
-            .Include(h => h.Rooms).ThenInclude(r => r.RoomType)
-            .Include(h => h.Rooms).ThenInclude(r => r.BookingRooms).ThenInclude(br => br.Booking);
-
-        query = FilterByRoomAvailability(query, request);
-        query = ApplyGeneralHotelFilters(query, request);
-
-        return await query.ToListAsync();
-    }
-
-    private IQueryable<Hotel> FilterByRoomAvailability(IQueryable<Hotel> query, SearchHotelQuery request)
-    {
-        return query.Where(h => h.Rooms.Any(r =>
-            r.BookingRooms.Any(br =>
-                (!request.MaxPrice.HasValue || r.Price <= request.MaxPrice) &&
-                (br.Booking.CheckOut <= request.CheckIn || br.Booking.CheckIn >= request.CheckOut) &&
-                r.AdultsCapacity >= request.NumberOfAdults &&
-                r.ChildrenCapacity >= request.NumberOfChildren &&
-                (!string.IsNullOrEmpty(request.RoomType) && r.RoomType.Name == request.RoomType))));
-    }
-
-    private IQueryable<Hotel> ApplyGeneralHotelFilters(IQueryable<Hotel> query, SearchHotelQuery request)
-    {
-        if (!string.IsNullOrEmpty(request.HotelName))
-            query = query.Where(h => h.Name.Contains(request.HotelName));
-
-        if (!string.IsNullOrEmpty(request.City))
-            query = query.Where(h => h.City.Name.Contains(request.City));
-
-        if (request.MinRating.HasValue)
-            query = query.Where(h => h.StarRating >= request.MinRating);
-
-        return query;
-    }
-    
     public async Task<Hotel> CreateAsync(Hotel hotel)
     {
         await _context.Hotels.AddAsync(hotel);
@@ -94,5 +55,48 @@ public class HotelRepository : IHotelRepository
         _context.Hotels.Attach(hotel);
         _context.Hotels.Remove(hotel);
         await _context.SaveChangesAsync();
+    }
+
+    public async Task<List<Hotel>> SearchAndFilterHotelsAsync(SearchAndFilterHotelsQuery request)
+    {
+        IQueryable<Hotel> query = _context.Hotels
+            .Include(h => h.HotelAmenities).ThenInclude(ha => ha.Amenity)
+            .Include(h => h.HotelImages)
+            .Include(h => h.City)
+            .Include(h => h.Rooms).ThenInclude(r => r.RoomType)
+            .Include(h => h.Rooms).ThenInclude(r => r.BookingRooms).ThenInclude(br => br.Booking)
+            .AsSplitQuery();
+
+        query = FilterByHotelName(query, request.HotelName);
+        query = FilterByCity(query, request.City);
+        query = FilterByRating(query, request.MinRating);
+        query = FilterByRoomsAndAvailability(query, request);
+        
+        return await query.ToListAsync();
+    }
+    
+    private IQueryable<Hotel> FilterByHotelName(IQueryable<Hotel> query, string? hotelName)
+    {
+        return string.IsNullOrWhiteSpace(hotelName) ? query : query.Where(h => h.Name.Contains(hotelName));
+    }
+
+    private IQueryable<Hotel> FilterByCity(IQueryable<Hotel> query, string? city)
+    {
+        return string.IsNullOrWhiteSpace(city) ? query : query.Where(h => h.City.Name == city);
+    }
+
+    private IQueryable<Hotel> FilterByRating(IQueryable<Hotel> query, int? minRating)
+    {
+        return minRating == null ? query : query.Where(h => h.StarRating >= minRating.Value);
+    } 
+    
+    private IQueryable<Hotel> FilterByRoomsAndAvailability(IQueryable<Hotel> query, SearchAndFilterHotelsQuery request)
+    {
+        return query.Where(h => h.Rooms
+            .Count(r => !r.BookingRooms.Any(br => br.Booking.CheckIn < request.CheckOut && br.Booking.CheckOut > request.CheckIn)
+                        && r.AdultsCapacity >= request.NumberOfAdults
+                        && r.ChildrenCapacity >= request.NumberOfChildren
+                        && (request.MaxPrice == null || r.Price <= request.MaxPrice)
+                        && (request.RoomType == null || r.RoomType.Name.Equals(request.RoomType))) >= request.NumberOfRooms);
     }
 }
