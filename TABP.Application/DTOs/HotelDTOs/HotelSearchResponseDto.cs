@@ -1,4 +1,5 @@
-using TABP.Domain.Entities;
+using TABP.Application.DTOs.AmenityDTOs;
+using TABP.Application.DTOs.HotelImageDTOs;
 
 namespace TABP.Application.DTOs.HotelDTOs;
 
@@ -8,6 +9,6 @@ public class HotelSearchResponseDto
     public string Name { get; set; }
     public float StarRating { get; set; }
     public string CityName { get; set; }
-    public List<Amenity> Amenities { get; set; }
-    public List<HotelImage> HotelImages { get; set; }
+    public List<AmenityDto> Amenities { get; set; }
+    public List<HotelImageDto> HotelImages { get; set; }
 }
