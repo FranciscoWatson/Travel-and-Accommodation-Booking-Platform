@@ -6,12 +6,12 @@ using TABP.Application.Queries.Hotels;
 
 namespace TABP.Application.Handlers.Hotels;
 
-public class SearchHotelQueryHandler : IRequestHandler<SearchHotelQuery, List<HotelSearchResponseDto>>
+public class SearchAndFilterHotelsHandler : IRequestHandler<SearchHotelQuery, List<HotelSearchResponseDto>>
 {
     private readonly IHotelRepository _hotelRepository;
     private readonly IMapper _mapper;
 
-    public SearchHotelQueryHandler(IHotelRepository hotelRepository, IMapper mapper)
+    public SearchAndFilterHotelsHandler(IHotelRepository hotelRepository, IMapper mapper)
     {
         _hotelRepository = hotelRepository;
         _mapper = mapper;
@@ -19,7 +19,7 @@ public class SearchHotelQueryHandler : IRequestHandler<SearchHotelQuery, List<Ho
 
     public async Task<List<HotelSearchResponseDto>> Handle(SearchHotelQuery request, CancellationToken cancellationToken)
     {
-        var hotels = await _hotelRepository.SearchHotelsAsync(request);
+        var hotels = await _hotelRepository.SearchAndFilterHotelsAsync(request);
         return _mapper.Map<List<HotelSearchResponseDto>>(hotels);
     }
 }

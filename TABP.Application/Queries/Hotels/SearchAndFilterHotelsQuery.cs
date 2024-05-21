@@ -3,7 +3,7 @@ using TABP.Application.DTOs.HotelDTOs;
 
 namespace TABP.Application.Queries.Hotels;
 
-public class SearchHotelQuery : IRequest<List<HotelSearchResponseDto>>
+public class SearchAndFilterHotelsQuery : IRequest<List<HotelSearchResponseDto>>
 {
     public DateTime CheckIn { get; set; }
     public DateTime CheckOut { get; set; }
