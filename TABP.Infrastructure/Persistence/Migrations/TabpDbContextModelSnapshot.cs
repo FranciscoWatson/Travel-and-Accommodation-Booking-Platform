@@ -395,23 +395,11 @@ namespace TABP.Infrastructure.Persistence.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("NEWID()");
 
-                    b.Property<int>("AdultsCapacity")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ChildrenCapacity")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("HotelId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("RoomNumber")
                         .HasColumnType("int");
@@ -420,8 +408,6 @@ namespace TABP.Infrastructure.Persistence.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("RoomId");
-
-                    b.HasIndex("HotelId");
 
                     b.HasIndex("RoomTypeId");
 
@@ -435,6 +421,9 @@ namespace TABP.Infrastructure.Persistence.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("NEWID()");
 
+                    b.Property<Guid>("RoomTypeId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Url")
                         .IsRequired()
                         .HasMaxLength(500)
@@ -442,24 +431,9 @@ namespace TABP.Infrastructure.Persistence.Migrations
 
                     b.HasKey("RoomImageId");
 
+                    b.HasIndex("RoomTypeId");
+
                     b.ToTable("RoomImages");
-                });
-
-            modelBuilder.Entity("TABP.Domain.Entities.RoomRoomImage", b =>
-                {
-                    b.Property<Guid>("RoomId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("RoomId");
-
-                    b.Property<Guid>("RoomImageId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("RoomImageId");
-
-                    b.HasKey("RoomId", "RoomImageId");
-
-                    b.HasIndex("RoomImageId");
-
-                    b.ToTable("RoomRoomImage", (string)null);
                 });
 
             modelBuilder.Entity("TABP.Domain.Entities.RoomType", b =>
@@ -469,20 +443,31 @@ namespace TABP.Infrastructure.Persistence.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("NEWID()");
 
+                    b.Property<int>("AdultsCapacity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ChildrenCapacity")
+                        .HasColumnType("int");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
+
+                    b.Property<Guid>("HotelId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<float>("RoomPriceMultiplier")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("RoomTypeId");
+
+                    b.HasIndex("HotelId");
 
                     b.ToTable("RoomTypes");
                 });
@@ -600,7 +585,7 @@ namespace TABP.Infrastructure.Persistence.Migrations
             modelBuilder.Entity("TABP.Domain.Entities.Discount", b =>
                 {
                     b.HasOne("TABP.Domain.Entities.RoomType", "RoomType")
-                        .WithMany()
+                        .WithMany("Discounts")
                         .HasForeignKey("RoomTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -683,40 +668,35 @@ namespace TABP.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("TABP.Domain.Entities.Room", b =>
                 {
-                    b.HasOne("TABP.Domain.Entities.Hotel", "Hotel")
-                        .WithMany("Rooms")
-                        .HasForeignKey("HotelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("TABP.Domain.Entities.RoomType", "RoomType")
-                        .WithMany()
+                        .WithMany("Rooms")
                         .HasForeignKey("RoomTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Hotel");
+                    b.Navigation("RoomType");
+                });
+
+            modelBuilder.Entity("TABP.Domain.Entities.RoomImage", b =>
+                {
+                    b.HasOne("TABP.Domain.Entities.RoomType", "RoomType")
+                        .WithMany("RoomImages")
+                        .HasForeignKey("RoomTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("RoomType");
                 });
 
-            modelBuilder.Entity("TABP.Domain.Entities.RoomRoomImage", b =>
+            modelBuilder.Entity("TABP.Domain.Entities.RoomType", b =>
                 {
-                    b.HasOne("TABP.Domain.Entities.Room", "Room")
-                        .WithMany("RoomRoomImages")
-                        .HasForeignKey("RoomId")
+                    b.HasOne("TABP.Domain.Entities.Hotel", "Hotel")
+                        .WithMany("RoomTypes")
+                        .HasForeignKey("HotelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TABP.Domain.Entities.RoomImage", "RoomImage")
-                        .WithMany("RoomRoomImages")
-                        .HasForeignKey("RoomImageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Room");
-
-                    b.Navigation("RoomImage");
+                    b.Navigation("Hotel");
                 });
 
             modelBuilder.Entity("TABP.Domain.Entities.User", b =>
@@ -750,19 +730,21 @@ namespace TABP.Infrastructure.Persistence.Migrations
 
                     b.Navigation("Reviews");
 
-                    b.Navigation("Rooms");
+                    b.Navigation("RoomTypes");
                 });
 
             modelBuilder.Entity("TABP.Domain.Entities.Room", b =>
                 {
                     b.Navigation("BookingRooms");
-
-                    b.Navigation("RoomRoomImages");
                 });
 
-            modelBuilder.Entity("TABP.Domain.Entities.RoomImage", b =>
+            modelBuilder.Entity("TABP.Domain.Entities.RoomType", b =>
                 {
-                    b.Navigation("RoomRoomImages");
+                    b.Navigation("Discounts");
+
+                    b.Navigation("RoomImages");
+
+                    b.Navigation("Rooms");
                 });
 
             modelBuilder.Entity("TABP.Domain.Entities.User", b =>

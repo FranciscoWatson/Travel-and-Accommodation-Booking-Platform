@@ -11,8 +11,5 @@ public class RoomConfiguration : IEntityTypeConfiguration<Room>
         builder.Property(r => r.RoomId)
             .HasDefaultValueSql("NEWID()")
             .ValueGeneratedOnAdd();
-        
-        builder.Property(r => r.Price)
-            .HasColumnType("decimal(18,2)");
     }
 }

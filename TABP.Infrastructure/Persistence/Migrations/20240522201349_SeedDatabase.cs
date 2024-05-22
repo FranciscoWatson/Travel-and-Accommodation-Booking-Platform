@@ -6,8 +6,9 @@ using TABP.Domain.Enums;
 namespace TABP.Infrastructure.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class SeedData : Migration
+    public partial class SeedDatabase : Migration
     {
+        /// <inheritdoc />
         private static readonly Guid countryIdArgentina = Guid.NewGuid();
         private static readonly Guid countryIdBrazil = Guid.NewGuid();
         private static readonly Guid countryIdUSA = Guid.NewGuid();
@@ -135,28 +136,26 @@ namespace TABP.Infrastructure.Persistence.Migrations
                     { hotelId2, amenityId3 }
                 });
             
-            Guid roomTypeStandardId = Guid.NewGuid();
-            Guid roomTypeDeluxeId = Guid.NewGuid();
-            Guid roomTypeFamilyId = Guid.NewGuid();
+
             migrationBuilder.InsertData(
                 table: "RoomTypes",
-                columns: new[] { "RoomTypeId", "Name", "Description", "RoomPriceMultiplier" },
+                columns: new[] { "RoomTypeId","HotelId","Name", "AdultsCapacity", "ChildrenCapacity" ,"Description", "Price" },
                 values: new object[,]
                 {
-                    { roomTypeStandardId, "Standard", "Standard room with basic amenities.", 1.0f },
-                    { roomTypeDeluxeId, "Deluxe", "A deluxe room with enhanced amenities.", 1.2f },
-                    { roomTypeFamilyId, "Family", "A spacious room suitable for families.", 1.5f }
+                    { roomTypeStandardId, hotelId1, "Standard", 2, 1, "Standard room with basic amenities.", 150m},
+                    { roomTypeDeluxeId, hotelId1,"Deluxe", 2, 1, "A deluxe room with enhanced amenities.", 200m},
+                    { roomTypeFamilyId, hotelId2,"Family", 3, 2, "A spacious room suitable for families.", 250m}
                 });
             
            
             migrationBuilder.InsertData(
                 table: "Rooms",
-                columns: new[] { "RoomId", "HotelId", "RoomTypeId", "RoomNumber", "Price", "AdultsCapacity", "ChildrenCapacity", "CreatedDate"},
+                columns: new[] { "RoomId", "RoomTypeId", "RoomNumber", "CreatedDate"},
                 values: new object[,]
                 {
-                    { roomId101, hotelId1, roomTypeStandardId, 101, 150m, 2, 1, DateTime.Today},
-                    { roomId102, hotelId2, roomTypeFamilyId, 102, 150m, 2, 2, DateTime.Today},
-                    { roomId103, hotelId1, roomTypeFamilyId, 201, 200m, 3, 2, DateTime.Today}
+                    { roomId101, roomTypeStandardId, 101, DateTime.Today},
+                    { roomId102, roomTypeFamilyId, 102, DateTime.Today},
+                    { roomId103, roomTypeFamilyId, 201, DateTime.Today}
                 });
             
             
@@ -239,8 +238,8 @@ namespace TABP.Infrastructure.Persistence.Migrations
             
          
             migrationBuilder.InsertData(
-                table: "RoomDiscounts",
-                columns: new[] { "RoomDiscountId", "RoomTypeId", "Percentage", "StartDate", "EndDate", "CreatedDate"},
+                table: "Discounts",
+                columns: new[] { "DiscountId", "RoomTypeId", "Percentage", "StartDate", "EndDate", "CreatedDate"},
                 values: new object[,]
                 {
                     { roomDiscountId1, roomTypeStandardId, 10.0f, DateTime.Today, DateTime.Today.AddDays(30), DateTime.Today},
@@ -250,82 +249,49 @@ namespace TABP.Infrastructure.Persistence.Migrations
           
             migrationBuilder.InsertData(
                 table: "RoomImages",
-                columns: new[] { "RoomImageId", "Url" },
+                columns: new[] { "RoomImageId", "RoomTypeId","Url" },
                 values: new object[,]
                 {
-                    { roomImageId1, "https://example.com/images/room101.jpg" },
-                    { roomImageId2, "https://example.com/images/room102.jpg" },
-                    { roomImageId3, "https://example.com/images/room201.jpg" }
+                    { roomImageId1, roomTypeDeluxeId ,"https://example.com/images/room101.jpg" },
+                    { roomImageId2, roomTypeDeluxeId, "https://example.com/images/room102.jpg" },
+                    { roomImageId3, roomTypeDeluxeId, "https://example.com/images/room201.jpg" }
                 });
-            
-            migrationBuilder.InsertData(
-                table: "RoomRoomImage", // This is the join table's name
-                columns: new[] { "RoomId", "RoomImageId" },
-                values: new object[,]
-                {
-                    { roomId101, roomImageId1 },
-                    { roomId102, roomImageId2 },
-                    { roomId103, roomImageId3 }
-                });
-
             
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
-{
-    // Remove RoomRoomImages
-    migrationBuilder.DeleteData(
-        table: "RoomRoomImage",
-        keyColumns: new[] { "RoomId", "RoomImageId" },
-        keyValues: new object[] { roomId101, roomImageId1 });
-
-    migrationBuilder.DeleteData(
-        table: "RoomRoomImage",
-        keyColumns: new[] { "RoomId", "RoomImageId" },
-        keyValues: new object[] { roomId102, roomImageId2 });
-
-    migrationBuilder.DeleteData(
-        table: "RoomRoomImage",
-        keyColumns: new[] { "RoomId", "RoomImageId" },
-        keyValues: new object[] { roomId103, roomImageId3 });
-
-    // Remove RoomImages
-    migrationBuilder.DeleteData(
+        {
+            migrationBuilder.DeleteData(
         table: "RoomImages",
         keyColumn: "RoomImageId",
-        keyValues: new object[] { roomImageId1, roomImageId2, roomImageId3 }
-    );
+        keyValues: new object[] { roomImageId1, roomImageId2, roomImageId3 });
 
-    // Remove RoomDiscounts
+    // Remove data from Discounts table
     migrationBuilder.DeleteData(
-        table: "RoomDiscounts",
-        keyColumn: "RoomDiscountId",
-        keyValues: new object[] { roomDiscountId1, roomDiscountId2 }
-    );
+        table: "Discounts",
+        keyColumn: "DiscountId",
+        keyValues: new object[] { roomDiscountId1, roomDiscountId2 });
 
-    // Remove HotelImages
+    // Remove data from HotelImages table
     migrationBuilder.DeleteData(
         table: "HotelImages",
         keyColumn: "HotelImageId",
-        keyValues: new object[] { hotelImageId1, hotelImageId2, hotelImageId3 }
-    );
+        keyValues: new object[] { hotelImageId1, hotelImageId2, hotelImageId3 });
 
-    // Remove Reviews
+    // Remove data from Reviews table
     migrationBuilder.DeleteData(
         table: "Reviews",
         keyColumn: "ReviewId",
-        keyValues: new object[] { reviewId1, reviewId2, reviewId3 }
-    );
+        keyValues: new object[] { reviewId1, reviewId2, reviewId3 });
 
-    // Remove Payments
+    // Remove data from Payments table
     migrationBuilder.DeleteData(
         table: "Payments",
         keyColumn: "PaymentId",
-        keyValues: new object[] { paymentId1, paymentId2, paymentId3 }
-    );
-    
-    // Remove BookingsRooms
+        keyValues: new object[] { paymentId1, paymentId2, paymentId3 });
+
+    // Remove data from BookingsRooms table
     migrationBuilder.DeleteData(
         table: "BookingRoom",
         keyColumns: new[] { "BookingId", "RoomId" },
@@ -339,103 +305,87 @@ namespace TABP.Infrastructure.Persistence.Migrations
         keyColumns: new[] { "BookingId", "RoomId" },
         keyValues: new object[] { bookingId3, roomId103 });
 
-
-    // Remove Bookings
+    // Remove data from Bookings table
     migrationBuilder.DeleteData(
         table: "Bookings",
         keyColumn: "BookingId",
-        keyValues: new object[] { bookingId1, bookingId2, bookingId3 }
-    );
+        keyValues: new object[] { bookingId1, bookingId2, bookingId3 });
 
-    // Remove Users
+    // Remove data from Users table
     migrationBuilder.DeleteData(
         table: "Users",
         keyColumn: "UserId",
-        keyValues: new object[] { userId1, userId2, userId3 }
-    );
+        keyValues: new object[] { userId1, userId2, userId3 });
 
-    // Remove UserRoles
+    // Remove data from UserRoles table
     migrationBuilder.DeleteData(
         table: "UserRoles",
         keyColumn: "UserRoleId",
-        keyValues: new object[] { userRoleGuest, userRoleAdmin }
-    );
+        keyValues: new object[] { userRoleGuest, userRoleAdmin });
 
-    // Remove Rooms
+    // Remove data from Rooms table
     migrationBuilder.DeleteData(
         table: "Rooms",
         keyColumn: "RoomId",
-        keyValues: new object[] { roomId101, roomId102, roomId103 }
-    );
+        keyValues: new object[] { roomId101, roomId102, roomId103 });
 
-    // Remove RoomTypes
+    // Remove data from RoomTypes table
     migrationBuilder.DeleteData(
         table: "RoomTypes",
         keyColumn: "RoomTypeId",
-        keyValues: new object[] { roomTypeStandardId, roomTypeDeluxeId, roomTypeFamilyId }
-    );
+        keyValues: new object[] { roomTypeStandardId, roomTypeDeluxeId, roomTypeFamilyId });
 
-    // Remove HotelAmenity
+    // Remove data from HotelAmenity table
     migrationBuilder.DeleteData(
         table: "HotelAmenity",
         keyColumns: new[] { "HotelId", "AmenityId" },
         keyValues: new object[] { hotelId1, amenityId1 });
-
     migrationBuilder.DeleteData(
         table: "HotelAmenity",
         keyColumns: new[] { "HotelId", "AmenityId" },
         keyValues: new object[] { hotelId2, amenityId1 });
-        
     migrationBuilder.DeleteData(
         table: "HotelAmenity",
         keyColumns: new[] { "HotelId", "AmenityId" },
         keyValues: new object[] { hotelId3, amenityId1 });
-
     migrationBuilder.DeleteData(
         table: "HotelAmenity",
         keyColumns: new[] { "HotelId", "AmenityId" },
         keyValues: new object[] { hotelId1, amenityId3 });
-
     migrationBuilder.DeleteData(
         table: "HotelAmenity",
         keyColumns: new[] { "HotelId", "AmenityId" },
         keyValues: new object[] { hotelId2, amenityId3 });
-    
-    // Remove Amenities
+
+    // Remove data from Amenities table
     migrationBuilder.DeleteData(
         table: "Amenities",
         keyColumn: "AmenityId",
-        keyValues: new object[] { amenityId1, amenityId3 }
-    );
+        keyValues: new object[] { amenityId1, amenityId3 });
 
-    // Remove Hotels
+    // Remove data from Hotels table
     migrationBuilder.DeleteData(
         table: "Hotels",
         keyColumn: "HotelId",
-        keyValues: new object[] { hotelId1, hotelId2, hotelId3 }
-    );
+        keyValues: new object[] { hotelId1, hotelId2, hotelId3 });
 
-    // Remove Owners
+    // Remove data from Owners table
     migrationBuilder.DeleteData(
         table: "Owners",
         keyColumn: "OwnerId",
-        keyValues: new object[] { ownerId1, ownerId2, ownerId3 }
-    );
+        keyValues: new object[] { ownerId1, ownerId2, ownerId3 });
 
-    // Remove Cities
+    // Remove data from Cities table
     migrationBuilder.DeleteData(
         table: "Cities",
         keyColumn: "CityId",
-        keyValues: new object[] { cityIdBuenosAires, cityIdRio, cityIdNYC }
-    );
+        keyValues: new object[] { cityIdBuenosAires, cityIdRio, cityIdNYC });
 
-    // Remove Countries
+    // Remove data from Countries table
     migrationBuilder.DeleteData(
         table: "Countries",
         keyColumn: "CountryId",
-        keyValues: new object[] { countryIdArgentina, countryIdBrazil, countryIdUSA }
-    );
-}
-
+        keyValues: new object[] { countryIdArgentina, countryIdBrazil, countryIdUSA });
+        }
     }
 }

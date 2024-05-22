@@ -13,5 +13,8 @@ public class RoomTypeConfiguration : IEntityTypeConfiguration<RoomType>
             .ValueGeneratedOnAdd();
         builder.Property(rt => rt.Name).HasMaxLength(100);
         builder.Property(rt => rt.Description).HasMaxLength(500);
+        
+        builder.Property(r => r.Price)
+            .HasColumnType("decimal(18,2)");
     }
 }
