@@ -30,4 +30,16 @@ public class HotelsController : ControllerBase
         
         return Ok(hotels);
     }
+    
+    [HttpGet("featured-deals")]
+    public async Task<ActionResult<IEnumerable<HotelSearchResponseDto>>> GetHotelsFeaturedDeals(
+        [FromQuery] HotelFeaturedDealsRequestDto hotelsFeaturedDealsRequest,
+        CancellationToken cancellationToken = default)
+    {
+        var query = _mapper.Map<GetHotelsFeaturedDealsQuery>(hotelsFeaturedDealsRequest);
+        
+        var hotels = await _mediator.Send(query, cancellationToken);
+        
+        return Ok(hotels);
+    }
 }

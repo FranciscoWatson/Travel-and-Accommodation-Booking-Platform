@@ -4,6 +4,7 @@ using TABP.Application.DTOs.HotelDTOs;
 using TABP.Application.DTOs.HotelImageDTOs;
 using TABP.Application.Queries.Hotels;
 using TABP.Domain.Entities;
+using TABP.Domain.Models;
 
 namespace TABP.Application.Mappings;
 
@@ -30,5 +31,9 @@ public class HotelProfile : Profile
             })));
         
         CreateMap<SearchAndFilterHotelsRequestDto, SearchAndFilterHotelsQuery>().ReverseMap();
+        
+        CreateMap<HotelFeaturedDealsRequestDto, GetHotelsFeaturedDealsQuery>().ReverseMap();
+        
+        CreateMap<FeaturedDeal, HotelFeaturedDealsResponseDto>().ReverseMap();
     }
 }
