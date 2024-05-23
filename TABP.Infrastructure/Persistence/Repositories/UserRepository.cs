@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using TABP.Application.Interfaces.Repositories;
 using TABP.Domain.Entities;
+using TABP.Domain.Models;
 
 namespace TABP.Infrastructure.Persistence.Repositories;
 
@@ -42,5 +43,36 @@ public class UserRepository : IUserRepository
         _context.Users.Attach(user);
         _context.Users.Remove(user);
         await _context.SaveChangesAsync();
+    }
+    
+    public async Task<List<RecentlyVisitedHotel>> GetRecentlyVisitedHotelsAsync(Guid userId, int count)
+    {
+        var bookings = await _context.Users
+            .Where(u => u.UserId == userId)
+            .SelectMany(u => u.Bookings)
+            .Select(b => new
+            {
+                HotelId = b.BookingRooms.First().Room.RoomType.Hotel.HotelId,
+                HotelName = b.BookingRooms.First().Room.RoomType.Hotel.Name,
+                CheckOut = b.CheckOut,
+                TotalPrice = b.BookingRooms.Sum(br => br.Room.RoomType.Price)
+            })
+            .OrderByDescending(b => b.CheckOut)
+            .ToListAsync();
+
+        var recentlyVisitedHotels = bookings
+            .GroupBy(b => b.HotelId)
+            .Select(g => new RecentlyVisitedHotel
+            {
+                HotelId = g.Key,
+                HotelName = g.First().HotelName,
+                PricePaid = g.First().TotalPrice,
+                LastVisited = g.First().CheckOut
+            })
+            .OrderByDescending(h => h.LastVisited)
+            .Take(count)
+            .ToList();
+
+        return recentlyVisitedHotels;
     }
 }
