@@ -55,7 +55,11 @@ public class UserRepository : IUserRepository
                 HotelId = b.BookingRooms.First().Room.RoomType.Hotel.HotelId,
                 HotelName = b.BookingRooms.First().Room.RoomType.Hotel.Name,
                 CheckOut = b.CheckOut,
-                TotalPrice = b.BookingRooms.Sum(br => br.Room.RoomType.Price)
+                TotalPrice = b.BookingRooms.Sum(br => br.Room.RoomType.Price),
+                CityName = b.BookingRooms.First().Room.RoomType.Hotel.City.Name,
+                StarRating = b.BookingRooms.First().Room.RoomType.Hotel.StarRating,
+                ThumbnailImage = b.BookingRooms.First().Room.RoomType.Hotel.HotelImages.First().Url
+                
             })
             .OrderByDescending(b => b.CheckOut)
             .ToListAsync();
@@ -67,7 +71,10 @@ public class UserRepository : IUserRepository
                 HotelId = g.Key,
                 HotelName = g.First().HotelName,
                 PricePaid = g.First().TotalPrice,
-                LastVisited = g.First().CheckOut
+                LastVisited = g.First().CheckOut,
+                CityName = g.First().CityName,
+                ThumbnailImage = g.First().ThumbnailImage,
+                StarRating = g.First().StarRating
             })
             .OrderByDescending(h => h.LastVisited)
             .Take(count)
