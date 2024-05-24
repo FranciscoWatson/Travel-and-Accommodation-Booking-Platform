@@ -13,5 +13,6 @@ public class CityConfiguration : IEntityTypeConfiguration<City>
             .ValueGeneratedOnAdd();
         builder.Property(c => c.Name).HasMaxLength(100);
         builder.Property(c => c.Description).HasMaxLength(300);
+        builder.Property(c => c.ThumbnailImage).HasMaxLength(500);
     }
 }

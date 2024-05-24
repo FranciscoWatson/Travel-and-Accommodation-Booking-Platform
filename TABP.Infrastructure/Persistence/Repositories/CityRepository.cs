@@ -52,6 +52,7 @@ public class CityRepository : ICityRepository
             {
                 CityId = c.CityId,
                 CityName = c.Name,
+                ThumbnailImage = c.ThumbnailImage,
                 VisitsCount = c.Hotels.SelectMany(h => h.RoomTypes)
                     .SelectMany(rt => rt.Rooms)
                     .SelectMany(r => r.BookingRooms)
