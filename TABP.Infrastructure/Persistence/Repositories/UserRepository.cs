@@ -55,7 +55,7 @@ public class UserRepository : IUserRepository
                 HotelId = b.BookingRooms.First().Room.RoomType.Hotel.HotelId,
                 HotelName = b.BookingRooms.First().Room.RoomType.Hotel.Name,
                 CheckOut = b.CheckOut,
-                TotalPrice = b.BookingRooms.Sum(br => br.Room.RoomType.Price),
+                TotalPrice = b.PriceAtBooking,
                 CityName = b.BookingRooms.First().Room.RoomType.Hotel.City.Name,
                 StarRating = b.BookingRooms.First().Room.RoomType.Hotel.StarRating,
                 ThumbnailImage = b.BookingRooms.First().Room.RoomType.Hotel.HotelImages.First().Url
