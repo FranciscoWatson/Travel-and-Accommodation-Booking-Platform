@@ -14,5 +14,5 @@ public interface IHotelRepository
     public Task UpdateAsync(Hotel hotel);
     public Task DeleteAsync(Guid id);
     public Task<List<HotelSearch>> SearchAndFilterHotelsAsync(SearchAndFilterHotelsQuery request);
-    public Task<List<FeaturedDeal>> GetHotelsWithActiveDiscounts(int count);
+    public Task<List<FeaturedDeal>> GetFeaturedDealsAsync(int count);
 }

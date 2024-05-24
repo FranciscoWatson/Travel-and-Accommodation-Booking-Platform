@@ -148,7 +148,7 @@ public class HotelRepository : IHotelRepository
         return query;
     }
     
-    public async Task<List<FeaturedDeal>> GetHotelsWithActiveDiscounts(int count)
+    public async Task<List<FeaturedDeal>> GetFeaturedDealsAsync(int count)
     {
         var currentDate = DateTime.UtcNow;
 
@@ -164,7 +164,7 @@ public class HotelRepository : IHotelRepository
                 HotelName = hotel.Name,
                 CityName = hotel.City.Name,
                 StarRating = hotel.StarRating,
-                ThumbnailUrl = hotel.HotelImages.FirstOrDefault().Url,
+                ThumbnailUrl = hotel.ThumbnailUrl,
                 DiscountPercentage = hotel.RoomTypes
                         .SelectMany(rt => rt.Discounts)
                         .Where(d => d.StartDate <= currentDate && d.EndDate >= currentDate)

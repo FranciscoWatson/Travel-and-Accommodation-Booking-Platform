@@ -19,7 +19,7 @@ public class GetHotelsFeaturedDealsHandler : IRequestHandler<GetHotelsFeaturedDe
 
     public async Task<List<HotelFeaturedDealsResponseDto>> Handle(GetHotelsFeaturedDealsQuery request, CancellationToken cancellationToken)
     {
-        var featuredDeals = await _hotelRepository.GetHotelsWithActiveDiscounts(request.Count);
+        var featuredDeals = await _hotelRepository.GetFeaturedDealsAsync(request.Count);
         
         return _mapper.Map<List<HotelFeaturedDealsResponseDto>>(featuredDeals);
     }
