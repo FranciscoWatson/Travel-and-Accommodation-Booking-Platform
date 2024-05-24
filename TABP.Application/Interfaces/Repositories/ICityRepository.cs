@@ -1,12 +1,14 @@
 using TABP.Domain.Entities;
+using TABP.Domain.Models;
 
 namespace TABP.Application.Interfaces.Repositories;
 
 public interface ICityRepository
 {
-    public Task<City?> GetByIdAsync(Guid id);
-    public Task<List<City>> GetAllAsync();
-    public Task<City> CreateAsync(City city);
-    public Task UpdateAsync(City city);
-    public Task DeleteAsync(Guid id);
+    Task<City?> GetByIdAsync(Guid id);
+    Task<List<City>> GetAllAsync();
+    Task<City> CreateAsync(City city);
+    Task UpdateAsync(City city);
+    Task DeleteAsync(Guid id);
+    Task<List<TrendingCity>> GetTrendingCities(int count);
 }
