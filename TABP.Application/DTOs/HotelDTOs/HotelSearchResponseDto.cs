@@ -9,6 +9,9 @@ public class HotelSearchResponseDto
     public string Name { get; set; }
     public float StarRating { get; set; }
     public string CityName { get; set; }
+    public decimal AveragePricePerNight { get; set; }
+    public string? ThumbnailUrl { get; set; }
+    public string Description { get; set; }
     public List<AmenityDto> Amenities { get; set; }
     public List<HotelImageDto> HotelImages { get; set; }
 }

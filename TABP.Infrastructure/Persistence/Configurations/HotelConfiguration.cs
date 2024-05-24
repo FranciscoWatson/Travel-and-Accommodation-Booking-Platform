@@ -19,5 +19,6 @@ public class HotelConfiguration : IEntityTypeConfiguration<Hotel>
         builder.Property(h => h.Address).HasMaxLength(300);
         builder.Property(h => h.Latitude).HasMaxLength(50);
         builder.Property(h => h.Longitude).HasMaxLength(50);
+        builder.Property(h => h.ThumbnailUrl).HasMaxLength(500);
     }
 }

@@ -19,7 +19,7 @@ public class HotelsController : ControllerBase
         _mapper = mapper;
     }
     
-    [HttpGet]
+    [HttpGet("search")]
     public async Task<ActionResult<IEnumerable<HotelSearchResponseDto>>> SearchHotels(
         [FromQuery] SearchAndFilterHotelsRequestDto searchAndFilterHotelsRequest,
         CancellationToken cancellationToken = default)

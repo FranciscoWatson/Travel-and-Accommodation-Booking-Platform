@@ -12,4 +12,5 @@ public class SearchAndFilterHotelsRequestDto
     public string? City { get; set; }
     public decimal? MaxPrice { get; init; }
     public int? MinRating { get; init; }
+    public List<Guid>? Amenities { get; init; }
 }

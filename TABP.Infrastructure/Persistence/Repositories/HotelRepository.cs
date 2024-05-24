@@ -58,7 +58,7 @@ public class HotelRepository : IHotelRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<List<Hotel>> SearchAndFilterHotelsAsync(SearchAndFilterHotelsQuery request)
+    public async Task<List<HotelSearch>> SearchAndFilterHotelsAsync(SearchAndFilterHotelsQuery request)
     {
         IQueryable<Hotel> query = _context.Hotels
             .Include(h => h.HotelAmenities).ThenInclude(ha => ha.Amenity)
@@ -70,10 +70,41 @@ public class HotelRepository : IHotelRepository
         query = FilterByCity(query, request.City);
         query = FilterByRating(query, request.MinRating);
         query = FilterByRoomsAndAvailability(query, request);
+        query = FilterByAmenities(query, request.Amenities);
+        
+        var result = await query.Select(h => new HotelSearch
+        {
+            HotelId = h.HotelId,
+            Name = h.Name,
+            ThumbnailUrl = h.ThumbnailUrl,
+            StarRating = h.StarRating,
+            AveragePricePerNight = h.RoomTypes.Average(rt => rt.Price),
+            Description = h.Description,
+            CityName = h.City.Name,
+            Amenities = h.HotelAmenities.Select(ha => ha.Amenity).ToList(),
+            HotelImages = h.HotelImages.ToList()
+        }).ToListAsync();
 
-        return await query.ToListAsync();
+        return result;
 
     }
+
+    private IQueryable<Hotel> FilterByAmenities(IQueryable<Hotel> query, List<Guid>? amenities)
+    {
+        if (amenities == null || amenities.Count == 0)
+        {
+            return query;
+        }
+        
+        foreach (var amenity in amenities)
+        {
+            query = query.Where(h => h.HotelAmenities.Any(ha => ha.AmenityId == amenity));
+        }
+
+        return query;
+    }
+
+
     private IQueryable<Hotel> FilterByHotelName(IQueryable<Hotel> query, string? hotelName)
     {
         return string.IsNullOrWhiteSpace(hotelName) ? query : query.Where(h => h.Name.Contains(hotelName));
@@ -91,14 +122,21 @@ public class HotelRepository : IHotelRepository
     
     private IQueryable<Hotel> FilterByRoomsAndAvailability(IQueryable<Hotel> query, SearchAndFilterHotelsQuery request)
     {
-        query = query.Where(h =>
-            h.RoomTypes.Any(roomType =>
-                roomType.Name == request.RoomType &&
-                roomType.AdultsCapacity >= request.NumberOfAdults &&
-                roomType.ChildrenCapacity >= request.NumberOfChildren &&
-                (request.MaxPrice == null || roomType.Price <= request.MaxPrice)
-            )
-        );
+        if (!string.IsNullOrEmpty(request.RoomType))
+        {
+            query = query.Where(h => h.RoomTypes.Any(rt =>
+                rt.Name == request.RoomType &&
+                rt.AdultsCapacity >= request.NumberOfAdults &&
+                rt.ChildrenCapacity >= request.NumberOfChildren &&
+                (request.MaxPrice == null || rt.Price <= request.MaxPrice)));
+        }
+        else
+        {
+            query = query.Where(h => h.RoomTypes.Any(rt =>
+                rt.AdultsCapacity >= request.NumberOfAdults &&
+                rt.ChildrenCapacity >= request.NumberOfChildren &&
+                (request.MaxPrice == null || rt.Price <= request.MaxPrice)));
+        }
 
         query = query.Where(h =>
             h.RoomTypes.Any(rt =>

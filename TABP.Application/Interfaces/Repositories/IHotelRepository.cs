@@ -13,6 +13,6 @@ public interface IHotelRepository
     public Task<Hotel> CreateAsync(Hotel hotel);
     public Task UpdateAsync(Hotel hotel);
     public Task DeleteAsync(Guid id);
-    public Task<List<Hotel>> SearchAndFilterHotelsAsync(SearchAndFilterHotelsQuery request);
+    public Task<List<HotelSearch>> SearchAndFilterHotelsAsync(SearchAndFilterHotelsQuery request);
     public Task<List<FeaturedDeal>> GetHotelsWithActiveDiscounts(int count);
 }

@@ -13,6 +13,7 @@ public class Hotel : AuditableEntity
     public string Address { get; set; }
     public string Latitude { get; set; }
     public string Longitude { get; set; }
+    public string? ThumbnailUrl { get; set; }
     
     public City City { get; set; }
     public Owner Owner { get; set; }
