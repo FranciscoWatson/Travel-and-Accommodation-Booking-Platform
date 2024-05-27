@@ -7,6 +7,7 @@ public class Booking : AuditableEntity
     public DateTime CheckIn { get; set; }
     public DateTime CheckOut { get; set; }
     public decimal PriceAtBooking { get; set; }
+    public string? SpecialRequest { get; set; }
     
     public Payment? Payment { get; set; }
     public User User { get; set; } 

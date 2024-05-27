@@ -15,6 +15,8 @@ public class BookingConfiguration : IEntityTypeConfiguration<Booking>
             .HasDefaultValueSql("NEWID()")
             .ValueGeneratedOnAdd();
         
+        builder.Property(b => b.SpecialRequest).HasMaxLength(500);
+
         builder.Property(b => b.CheckIn).HasColumnType("datetime2");
         builder.Property(b => b.CheckOut).HasColumnType("datetime2");
         
