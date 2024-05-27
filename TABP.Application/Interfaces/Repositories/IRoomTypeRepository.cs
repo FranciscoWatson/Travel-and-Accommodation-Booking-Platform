@@ -1,12 +1,14 @@
 using TABP.Domain.Entities;
+using TABP.Domain.Models;
 
 namespace TABP.Application.Interfaces.Repositories;
 
 public interface IRoomTypeRepository
 {
-    public Task<RoomType?> GetByIdAsync(Guid id);
-    public Task<List<RoomType>> GetAllAsync();
-    public Task<RoomType> CreateAsync(RoomType roomType);
-    public Task UpdateAsync(RoomType roomType);
-    public Task DeleteAsync(Guid id);
+    Task<RoomType?> GetByIdAsync(Guid id);
+    Task<List<RoomType>> GetAllAsync();
+    Task<RoomType> CreateAsync(RoomType roomType);
+    Task UpdateAsync(RoomType roomType);
+    Task DeleteAsync(Guid id);
+    Task<List<AvailableRoomTypes>> GetAvailableRoomTypesAsync(Guid hotelId, DateTime checkIn, DateTime checkOut);
 }

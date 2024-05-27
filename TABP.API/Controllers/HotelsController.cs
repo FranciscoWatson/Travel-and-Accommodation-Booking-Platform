@@ -2,6 +2,7 @@ using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TABP.Application.DTOs.HotelDTOs;
+using TABP.Application.DTOs.RoomTypeDTOs;
 using TABP.Application.Queries.Hotels;
 
 namespace Travel_and_Accommodation_Booking_Platform.Controllers;
@@ -50,5 +51,19 @@ public class HotelsController : ControllerBase
         var hotels = await _mediator.Send(query, cancellationToken);
         
         return Ok(hotels);
+    }
+    
+    [HttpGet("{hotelId}/room-types")]
+    public async Task<ActionResult<IEnumerable<RoomTypeWithDiscountDto>>> GetHotelRoomTypes(
+        [FromRoute] Guid hotelId,
+        [FromQuery] RoomTypeWithDiscountRequestDto roomTypeWithDiscountRequestDto,
+        CancellationToken cancellationToken = default)
+    {
+        var query = _mapper.Map<GetHotelRoomTypesQuery>(roomTypeWithDiscountRequestDto, opts => 
+            opts.AfterMap((src, dest) => dest.HotelId = hotelId));
+
+        var roomTypes = await _mediator.Send(query, cancellationToken);
+
+        return Ok(roomTypes);
     }
 }
