@@ -1,3 +1,6 @@
+using TABP.Application.DTOs.AmenityDTOs;
+using TABP.Application.DTOs.HotelImageDTOs;
+using TABP.Application.DTOs.ReviewDTOs;
 using TABP.Domain.Entities;
 
 namespace TABP.Application.DTOs.HotelDTOs;
@@ -16,8 +19,8 @@ public class HotelFullDetailsDto
     public string CityName { get; set; }
     public string OwnerName { get; set; }
     
-    public List<Amenity> Amenities { get; set; }
-    public List<Review> Reviews { get; set; }
-    public List<HotelImage> HotelImages { get; set; }
+    public List<AmenityDto> Amenities { get; set; }
+    public List<ReviewDto> Reviews { get; set; }
+    public List<HotelImageDto> HotelImages { get; set; }
     
 }

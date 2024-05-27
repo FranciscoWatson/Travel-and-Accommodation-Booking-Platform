@@ -19,6 +19,15 @@ public class HotelsController : ControllerBase
         _mapper = mapper;
     }
     
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<HotelFullDetailsDto>>> GetHotels(CancellationToken cancellationToken = default)
+    {
+        var hotels = await _mediator.Send(new GetAllHotelsWithFullDetailsQuery(), cancellationToken);
+        
+        return Ok(hotels);
+    }
+
+    
     [HttpGet("search")]
     public async Task<ActionResult<IEnumerable<HotelSearchResponseDto>>> SearchHotels(
         [FromQuery] SearchAndFilterHotelsRequestDto searchAndFilterHotelsRequest,
