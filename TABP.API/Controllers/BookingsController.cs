@@ -20,8 +20,6 @@ public class BookingsController : ControllerBase
         _mapper = mapper;
     }
     
-
-    
     [HttpGet("{BookingId}")]
     public async Task<ActionResult<BookingDto>> GetBooking(
         Guid BookingId, CancellationToken cancellationToken)
@@ -31,5 +29,15 @@ public class BookingsController : ControllerBase
         var booking = await _mediator.Send(query, cancellationToken);
 
         return Ok(booking);
+    }
+    
+    [HttpPost]
+    public async Task<ActionResult> CreateBooking([FromBody] CreateBookingRequestDto createBookingRequestDto, CancellationToken cancellationToken = default)
+    {
+        var command = _mapper.Map<CreateBookingCommand>(createBookingRequestDto);
+        
+        var booking = await _mediator.Send(command, cancellationToken);
+        
+        return CreatedAtAction(nameof(GetBooking), new { BookingId = booking.BookingId }, booking);
     }
 }

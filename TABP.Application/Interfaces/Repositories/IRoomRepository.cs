@@ -4,9 +4,10 @@ namespace TABP.Application.Interfaces.Repositories;
 
 public interface IRoomRepository
 {
-    public Task<Room?> GetByIdAsync(Guid id);
-    public Task<List<Room>> GetAllAsync();
-    public Task<Room> CreateAsync(Room room);
-    public Task UpdateAsync(Room room);
-    public Task DeleteAsync(Guid id);
+    Task<Room?> GetByIdAsync(Guid id);
+    Task<List<Room>> GetAllAsync();
+    Task<Room> CreateAsync(Room room);
+    Task UpdateAsync(Room room);
+    Task DeleteAsync(Guid id);
+    Task<List<Room>> GetAvailableRoomsByTypeIdAsync(Guid roomTypeId, DateTime checkIn, DateTime checkOut);
 }

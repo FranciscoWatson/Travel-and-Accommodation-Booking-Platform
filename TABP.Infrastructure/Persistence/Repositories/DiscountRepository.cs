@@ -43,4 +43,11 @@ public class DiscountRepository : IDiscountRepository
         _context.Discounts.Remove(discount);
         await _context.SaveChangesAsync();
     }
+
+    public async Task<List<Discount>> GetActiveDiscountsByRoomTypeIdAsync(Guid roomTypeId, DateTime checkIn, DateTime checkOut)
+    {
+        return await _context.Discounts
+            .Where(d => d.RoomTypeId == roomTypeId && d.StartDate <= checkIn && d.EndDate >= checkOut)
+            .ToListAsync();
+    }
 }

@@ -43,4 +43,11 @@ public class RoomRepository : IRoomRepository
         _context.Rooms.Remove(room);
         await _context.SaveChangesAsync();
     }
+
+    public async Task<List<Room>> GetAvailableRoomsByTypeIdAsync(Guid roomTypeId, DateTime checkIn, DateTime checkOut)
+    {
+        return await _context.Rooms
+            .Where(r => r.RoomTypeId == roomTypeId && r.BookingRooms.All(br => br.Booking.CheckOut <= checkIn || br.Booking.CheckIn >= checkOut))
+            .ToListAsync();
+    }
 }
