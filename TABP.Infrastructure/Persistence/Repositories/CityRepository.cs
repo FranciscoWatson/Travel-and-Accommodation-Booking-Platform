@@ -21,7 +21,7 @@ public class CityRepository : ICityRepository
 
     public async Task<List<City>> GetAllAsync()
     {
-        return await _context.Cities.ToListAsync();
+        return await _context.Cities.Include(c => c.Hotels).ToListAsync();
     }
 
     public async Task<City> CreateAsync(City city)

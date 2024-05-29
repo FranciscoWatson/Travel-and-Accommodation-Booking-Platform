@@ -9,16 +9,27 @@ namespace Travel_and_Accommodation_Booking_Platform.Controllers;
 
 [ApiController]
 [Route("/api/cities")]
-public class CitiesControllers : ControllerBase
+public class CitiesController : ControllerBase
 {
     private readonly IMediator _mediator;
     private readonly IMapper _mapper;
 
-    public CitiesControllers(IMediator mediator, IMapper mapper)
+    public CitiesController(IMediator mediator, IMapper mapper)
     {
         _mediator = mediator;
         _mapper = mapper;
     }
+    
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<CityForAdminDto>>> GetCities(CancellationToken cancellationToken = default)
+    {
+        var query = new GetCitiesQuery();
+        
+        var cities = await _mediator.Send(query, cancellationToken);
+        
+        return Ok(cities);
+    }
+    
     
     [HttpGet("trending")]
     public async Task<ActionResult<IEnumerable<TrendingCityDto>>> GetTrendingCities(int count = 5,
