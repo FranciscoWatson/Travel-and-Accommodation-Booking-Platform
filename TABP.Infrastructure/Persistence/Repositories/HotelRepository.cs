@@ -27,6 +27,15 @@ public class HotelRepository : IHotelRepository
     {
         return await _context.Hotels.ToListAsync();
     }
+    
+    public async Task<List<Hotel>> GetAllForAdminAsync()
+    {
+        return await _context.Hotels
+            .Include(h => h.Owner)
+            .Include(h => h.RoomTypes)
+            .ThenInclude(rt => rt.Rooms)
+            .ToListAsync();
+    }
 
     public async Task<List<Hotel>> GetAllWithFullDetailsAsync()
     {

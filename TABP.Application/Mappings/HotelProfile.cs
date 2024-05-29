@@ -53,5 +53,9 @@ public class HotelProfile : Profile
         CreateMap<HotelFeaturedDealsRequestDto, GetHotelsFeaturedDealsQuery>().ReverseMap();
         
         CreateMap<FeaturedDeal, HotelFeaturedDealsResponseDto>().ReverseMap();
+        
+        CreateMap<Hotel, HotelForAdminResponseDto>()
+            .ForMember(dto => dto.OwnerName, opt => opt.MapFrom(h => h.Owner.FirstName + " " + h.Owner.LastName))
+            .ForMember(dto => dto.NumberOfRooms, opt => opt.MapFrom(h => h.RoomTypes.Sum(rt => rt.Rooms.Count)));
     }
 }

@@ -6,12 +6,13 @@ namespace TABP.Domain.Interfaces.Repositories;
 
 public interface IHotelRepository
 {
-    public Task<Hotel?> GetByIdAsync(Guid id);
-    public Task<List<Hotel>> GetAllAsync();
-    public Task<List<Hotel>> GetAllWithFullDetailsAsync();
-    public Task<Hotel> CreateAsync(Hotel hotel);
-    public Task UpdateAsync(Hotel hotel);
-    public Task DeleteAsync(Guid id);
-    public Task<List<HotelSearch>> SearchAndFilterHotelsAsync(IHotelSearchCriteria request);
-    public Task<List<FeaturedDeal>> GetFeaturedDealsAsync(int count);
+    Task<Hotel?> GetByIdAsync(Guid id);
+    Task<List<Hotel>> GetAllAsync();
+    Task<List<Hotel>> GetAllForAdminAsync();
+    Task<List<Hotel>> GetAllWithFullDetailsAsync();
+    Task<Hotel> CreateAsync(Hotel hotel);
+    Task UpdateAsync(Hotel hotel);
+    Task DeleteAsync(Guid id);
+    Task<List<HotelSearch>> SearchAndFilterHotelsAsync(IHotelSearchCriteria request);
+    Task<List<FeaturedDeal>> GetFeaturedDealsAsync(int count);
 }

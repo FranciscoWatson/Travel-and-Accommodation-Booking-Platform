@@ -66,4 +66,13 @@ public class HotelsController : ControllerBase
 
         return Ok(roomTypes);
     }
+    
+    
+    [HttpGet("admin")]
+    public async Task<ActionResult<IEnumerable<HotelForAdminResponseDto>>> GetHotelsForAdmins(CancellationToken cancellationToken = default)
+    {
+        var hotels = await _mediator.Send(new GetAllHotelsForAdminQuery(), cancellationToken);
+        
+        return Ok(hotels);
+    }
 }
