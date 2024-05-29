@@ -42,16 +42,16 @@ public class CitiesController : ControllerBase
     }
     
     [HttpPost]
-    public async Task<ActionResult<CityForAdminDto>> CreateCity(CityForCreationDto cityForCreationDto, CancellationToken cancellationToken = default)
+    public async Task<ActionResult<CityForCreationResponseDto>> CreateCity(CityForCreationRequestDto cityForCreationRequestDto, CancellationToken cancellationToken = default)
     {
-        var command = _mapper.Map<CreateCityCommand>(cityForCreationDto);
+        var command = _mapper.Map<CreateCityCommand>(cityForCreationRequestDto);
         var city = await _mediator.Send(command, cancellationToken);
         
         return CreatedAtAction(nameof(GetCity), new { cityId = city.CityId }, city);
     }
     
     [HttpGet("trending")]
-    public async Task<ActionResult<IEnumerable<TrendingCityDto>>> GetTrendingCities(int count = 5,
+    public async Task<ActionResult<IEnumerable<TrendingCityResponseDto>>> GetTrendingCities(int count = 5,
         CancellationToken cancellationToken = default)
     {
         var query = new GetTrendingCitiesQuery(count);

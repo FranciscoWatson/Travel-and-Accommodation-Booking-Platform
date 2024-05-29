@@ -48,7 +48,7 @@ public class HotelProfile : Profile
                 Description = a.Description
             })));
         
-        CreateMap<SearchAndFilterHotelsRequestDto, SearchAndFilterHotelsQuery>().ReverseMap();
+        CreateMap<HotelSearchRequestDto, SearchAndFilterHotelsQuery>().ReverseMap();
         
         CreateMap<HotelFeaturedDealsRequestDto, GetHotelsFeaturedDealsQuery>().ReverseMap();
         

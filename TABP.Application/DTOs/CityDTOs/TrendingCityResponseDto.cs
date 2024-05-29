@@ -1,6 +1,6 @@
 namespace TABP.Application.DTOs.CityDTOs;
 
-public class TrendingCityDto
+public class TrendingCityResponseDto
 {
     public Guid CityId { get; set; }
     public string CityName { get; set; }

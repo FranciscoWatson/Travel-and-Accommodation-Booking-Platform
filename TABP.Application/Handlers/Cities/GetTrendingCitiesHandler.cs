@@ -6,7 +6,7 @@ using TABP.Domain.Interfaces.Repositories;
 
 namespace TABP.Application.Handlers.Cities;
 
-public class GetTrendingCitiesHandler : IRequestHandler<GetTrendingCitiesQuery, List<TrendingCityDto>>
+public class GetTrendingCitiesHandler : IRequestHandler<GetTrendingCitiesQuery, List<TrendingCityResponseDto>>
 {
     private readonly ICityRepository _cityRepository;
     private readonly IMapper _mapper;
@@ -17,9 +17,9 @@ public class GetTrendingCitiesHandler : IRequestHandler<GetTrendingCitiesQuery, 
         _mapper = mapper;
     }
 
-    public async Task<List<TrendingCityDto>> Handle(GetTrendingCitiesQuery request, CancellationToken cancellationToken)
+    public async Task<List<TrendingCityResponseDto>> Handle(GetTrendingCitiesQuery request, CancellationToken cancellationToken)
     {
         var cities = await _cityRepository.GetTrendingCities(request.Count);
-        return _mapper.Map<List<TrendingCityDto>>(cities);
+        return _mapper.Map<List<TrendingCityResponseDto>>(cities);
     }
 }

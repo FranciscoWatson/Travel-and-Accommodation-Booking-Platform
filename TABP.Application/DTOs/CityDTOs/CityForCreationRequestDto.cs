@@ -1,6 +1,6 @@
 namespace TABP.Application.DTOs.CityDTOs;
 
-public class CityForCreationDto
+public class CityForCreationRequestDto
 {
     public string Name { get; set; }
     public string Description { get; set; }

@@ -6,12 +6,12 @@ using TABP.Domain.Interfaces.Repositories;
 
 namespace TABP.Application.Handlers.Hotels;
 
-public class GetAllHotelsWithFullDetailsQueryHandler : IRequestHandler<GetAllHotelsWithFullDetailsQuery, List<HotelFullDetailsDto>>
+public class GetAllHotelsWithFullDetailsHandler : IRequestHandler<GetAllHotelsWithFullDetailsQuery, List<HotelFullDetailsDto>>
 {
     private readonly IHotelRepository _hotelRepository;
     private readonly IMapper _mapper;
 
-    public GetAllHotelsWithFullDetailsQueryHandler(IHotelRepository hotelRepository, IMapper mapper)
+    public GetAllHotelsWithFullDetailsHandler(IHotelRepository hotelRepository, IMapper mapper)
     {
         _hotelRepository = hotelRepository;
         _mapper = mapper;

@@ -6,7 +6,7 @@ using TABP.Domain.Interfaces.Repositories;
 
 namespace TABP.Application.Handlers.Hotels;
 
-public class GetHotelRoomTypeHandler : IRequestHandler<GetHotelRoomTypesQuery, List<RoomTypeWithDiscountDto>>
+public class GetHotelRoomTypeHandler : IRequestHandler<GetHotelRoomTypesQuery, List<RoomTypeWithDiscountResponseDto>>
 {
     private readonly IRoomTypeRepository _roomTypeRepository;
     private readonly IMapper _mapper;
@@ -17,9 +17,9 @@ public class GetHotelRoomTypeHandler : IRequestHandler<GetHotelRoomTypesQuery, L
         _mapper = mapper;
     }
 
-    public async Task<List<RoomTypeWithDiscountDto>> Handle(GetHotelRoomTypesQuery request, CancellationToken cancellationToken)
+    public async Task<List<RoomTypeWithDiscountResponseDto>> Handle(GetHotelRoomTypesQuery request, CancellationToken cancellationToken)
     {
         var roomTypes = await _roomTypeRepository.GetAvailableRoomTypesAsync(request.HotelId, request.CheckIn, request.CheckOut);
-        return _mapper.Map<List<RoomTypeWithDiscountDto>>(roomTypes);
+        return _mapper.Map<List<RoomTypeWithDiscountResponseDto>>(roomTypes);
     }
 }

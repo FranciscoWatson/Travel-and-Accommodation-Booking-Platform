@@ -31,10 +31,10 @@ public class HotelsController : ControllerBase
     
     [HttpGet("search")]
     public async Task<ActionResult<IEnumerable<HotelSearchResponseDto>>> SearchHotels(
-        [FromQuery] SearchAndFilterHotelsRequestDto searchAndFilterHotelsRequest,
+        [FromQuery] HotelSearchRequestDto hotelSearchRequest,
         CancellationToken cancellationToken = default)
     {
-        var query = _mapper.Map<SearchAndFilterHotelsQuery>(searchAndFilterHotelsRequest);
+        var query = _mapper.Map<SearchAndFilterHotelsQuery>(hotelSearchRequest);
         
         var hotels = await _mediator.Send(query, cancellationToken);
         
@@ -54,7 +54,7 @@ public class HotelsController : ControllerBase
     }
     
     [HttpGet("{hotelId}/room-types")]
-    public async Task<ActionResult<IEnumerable<RoomTypeWithDiscountDto>>> GetHotelRoomTypes(
+    public async Task<ActionResult<IEnumerable<RoomTypeWithDiscountResponseDto>>> GetHotelRoomTypes(
         [FromRoute] Guid hotelId,
         [FromQuery] RoomTypeWithDiscountRequestDto roomTypeWithDiscountRequestDto,
         CancellationToken cancellationToken = default)

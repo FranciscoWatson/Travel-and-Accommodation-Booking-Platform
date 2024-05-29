@@ -1,6 +1,6 @@
 namespace TABP.Application.DTOs.HotelDTOs;
 
-public class SearchAndFilterHotelsRequestDto
+public class HotelSearchRequestDto
 {
     public DateTime CheckIn { get; set; } = DateTime.UtcNow.Date;
     public DateTime CheckOut { get; set; } = DateTime.UtcNow.Date.AddDays(1);

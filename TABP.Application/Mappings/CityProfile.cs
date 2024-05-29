@@ -10,14 +10,16 @@ public class CityProfile : Profile
 {
     public CityProfile()
     {
-        CreateMap<TrendingCity, TrendingCityDto>().ReverseMap();
+        CreateMap<TrendingCity, TrendingCityResponseDto>().ReverseMap();
         CreateMap<City, CityForAdminDto>()
             .ForMember(dto => dto.NumberOfHotels, opt => opt.MapFrom(c => c.Hotels.Count));
         
         CreateMap<City, CityDto>()
             .ForMember(dto => dto.CountryName, opt => opt.MapFrom(c => c.Country.Name));
         
-        CreateMap<CityForCreationDto, CreateCityCommand>();
+        CreateMap<CityForCreationRequestDto, CreateCityCommand>();
         CreateMap<CreateCityCommand, City>();
+        
+        CreateMap<City, CityForCreationResponseDto >();
     }
 }

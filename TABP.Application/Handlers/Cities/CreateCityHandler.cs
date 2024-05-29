@@ -7,7 +7,7 @@ using TABP.Domain.Interfaces.Repositories;
 
 namespace TABP.Application.Handlers.Cities;
 
-public class CreateCityHandler : IRequestHandler<CreateCityCommand, CityDto>
+public class CreateCityHandler : IRequestHandler<CreateCityCommand, CityForCreationResponseDto>
 {
     private readonly ICityRepository _cityRepository;
     private readonly IMapper _mapper;
@@ -18,10 +18,10 @@ public class CreateCityHandler : IRequestHandler<CreateCityCommand, CityDto>
         _mapper = mapper;
     }
 
-    public async Task<CityDto> Handle(CreateCityCommand request, CancellationToken cancellationToken)
+    public async Task<CityForCreationResponseDto> Handle(CreateCityCommand request, CancellationToken cancellationToken)
     {
         var city = _mapper.Map<City>(request);
         var createdCity = await _cityRepository.CreateAsync(city);
-        return _mapper.Map<CityDto>(createdCity);
+        return _mapper.Map<CityForCreationResponseDto>(createdCity);
     }
 }

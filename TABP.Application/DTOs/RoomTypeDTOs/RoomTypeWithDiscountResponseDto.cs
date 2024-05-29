@@ -1,6 +1,6 @@
 namespace TABP.Application.DTOs.RoomTypeDTOs;
 
-public class RoomTypeWithDiscountDto
+public class RoomTypeWithDiscountResponseDto
 {
     public Guid RoomTypeId { get; set; }
     public string Name { get; set; }

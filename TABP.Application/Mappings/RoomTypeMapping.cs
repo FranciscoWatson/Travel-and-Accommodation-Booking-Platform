@@ -9,7 +9,7 @@ public class RoomTypeMapping : Profile
 {
     public RoomTypeMapping()
     {
-        CreateMap<AvailableRoomTypes, RoomTypeWithDiscountDto>().ReverseMap();
+        CreateMap<AvailableRoomTypes, RoomTypeWithDiscountResponseDto>().ReverseMap();
         CreateMap<RoomTypeWithDiscountRequestDto, GetHotelRoomTypesQuery>().ReverseMap();
     }
 }
