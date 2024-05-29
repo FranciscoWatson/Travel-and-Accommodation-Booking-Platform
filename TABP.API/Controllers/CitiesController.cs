@@ -1,6 +1,7 @@
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using TABP.Application.Commands.Cities;
 using TABP.Application.DTOs.CityDTOs;
 using TABP.Application.Queries.Cities;
 
@@ -40,5 +41,15 @@ public class CitiesController : ControllerBase
         var cities = await _mediator.Send(query, cancellationToken);
         
         return Ok(cities);
+    }
+    
+    [HttpDelete("{cityId}")]
+    public async Task<ActionResult> DeleteCity(Guid cityId, CancellationToken cancellationToken = default)
+    {
+        var command = new DeleteCityCommand { CityId = cityId };
+        
+        await _mediator.Send(command, cancellationToken);
+        
+        return NoContent();
     }
 }
