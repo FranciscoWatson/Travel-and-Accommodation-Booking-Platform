@@ -16,7 +16,11 @@ public class CityRepository : ICityRepository
 
     public async Task<City?> GetByIdAsync(Guid id)
     {
-        return await _context.Cities.FindAsync(id);
+        var city = await _context.Cities
+            .Include(c => c.Hotels)
+            .Include(c => c.Country)
+            .FirstOrDefaultAsync(c => c.CityId == id);
+        return city;
     }
 
     public async Task<List<City>> GetAllAsync()

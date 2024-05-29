@@ -21,6 +21,16 @@ public class CitiesController : ControllerBase
         _mapper = mapper;
     }
     
+    [HttpGet("{cityId}")]
+    public async Task<ActionResult<CityForAdminDto>> GetCity(Guid cityId, CancellationToken cancellationToken = default)
+    {
+        var query = new GetCityByIdQuery { CityId = cityId };
+        
+        var city = await _mediator.Send(query, cancellationToken);
+        
+        return Ok(city);
+    }
+    
     [HttpGet]
     public async Task<ActionResult<IEnumerable<CityForAdminDto>>> GetCities(CancellationToken cancellationToken = default)
     {
