@@ -3,6 +3,7 @@ using TABP.Application.DTOs.HotelDTOs;
 using TABP.Application.Queries.Hotels;
 using TABP.Domain.Entities;
 using TABP.Domain.Interfaces;
+using TABP.Domain.Interfaces.Criteria;
 using TABP.Domain.Interfaces.Repositories;
 using TABP.Domain.Models;
 

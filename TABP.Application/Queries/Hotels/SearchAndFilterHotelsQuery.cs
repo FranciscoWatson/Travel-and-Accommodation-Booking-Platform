@@ -1,6 +1,7 @@
 using MediatR;
 using TABP.Application.DTOs.HotelDTOs;
 using TABP.Domain.Interfaces;
+using TABP.Domain.Interfaces.Criteria;
 
 namespace TABP.Application.Queries.Hotels;
 

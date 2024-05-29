@@ -1,4 +1,5 @@
 using TABP.Domain.Entities;
+using TABP.Domain.Interfaces.Criteria;
 using TABP.Domain.Models;
 
 namespace TABP.Domain.Interfaces.Repositories;

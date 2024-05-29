@@ -1,4 +1,4 @@
-namespace TABP.Domain.Interfaces;
+namespace TABP.Domain.Interfaces.Criteria;
 
 public interface IHotelSearchCriteria
 {
