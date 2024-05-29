@@ -1,4 +1,5 @@
 using AutoMapper;
+using TABP.Application.Commands.Cities;
 using TABP.Application.DTOs.CityDTOs;
 using TABP.Domain.Entities;
 using TABP.Domain.Models;
@@ -15,5 +16,8 @@ public class CityProfile : Profile
         
         CreateMap<City, CityDto>()
             .ForMember(dto => dto.CountryName, opt => opt.MapFrom(c => c.Country.Name));
+        
+        CreateMap<CityForCreationDto, CreateCityCommand>();
+        CreateMap<CreateCityCommand, City>();
     }
 }
