@@ -22,6 +22,16 @@ public class HotelRepository : IHotelRepository
     {
         return await _context.Hotels.FindAsync(id);
     }
+    
+    public async Task<Hotel?> GetByIdAdminAsync(Guid id)
+    {
+        var hotel = await _context.Hotels
+            .Include(h => h.Owner)
+            .Include(h => h.RoomTypes)
+            .ThenInclude(rt => rt.Rooms)
+            .FirstOrDefaultAsync(h => h.HotelId == id);
+        return hotel;
+    }
 
     public async Task<List<Hotel>> GetAllAsync()
     {

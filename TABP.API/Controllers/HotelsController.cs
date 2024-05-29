@@ -68,6 +68,18 @@ public class HotelsController : ControllerBase
         return Ok(roomTypes);
     }
     
+    // ------Admins (Add Auth Later)-------
+    
+    [HttpGet("{hotelId}")]
+    public async Task<ActionResult<HotelForAdminResponseDto>> GetHotel(Guid hotelId, CancellationToken cancellationToken = default)
+    {
+        var query = new GetHotelByIdQuery { HotelId = hotelId };
+        
+        var hotel = await _mediator.Send(query, cancellationToken);
+        
+        return Ok(hotel);
+    }
+    
     
     [HttpGet("admin")]
     public async Task<ActionResult<IEnumerable<HotelForAdminResponseDto>>> GetHotelsForAdmins(CancellationToken cancellationToken = default)
@@ -86,4 +98,18 @@ public class HotelsController : ControllerBase
         
         return NoContent();
     }
+    
+    [HttpPost]
+    public async Task<ActionResult<HotelForAdminResponseDto>> CreateHotel(
+        [FromBody] HotelForCreationRequestDto hotelForCreationRequestDto,
+        CancellationToken cancellationToken = default)
+    {
+        var command = _mapper.Map<CreateHotelCommand>(hotelForCreationRequestDto);
+        
+        var hotel = await _mediator.Send(command, cancellationToken);
+        
+        return CreatedAtAction(nameof(GetHotel), new { hotelId = hotel.HotelId }, hotel);
+    }
+    
+    
 }

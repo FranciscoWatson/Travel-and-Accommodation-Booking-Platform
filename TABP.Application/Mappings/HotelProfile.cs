@@ -1,4 +1,5 @@
 using AutoMapper;
+using TABP.Application.Commands.Hotels;
 using TABP.Application.DTOs.AmenityDTOs;
 using TABP.Application.DTOs.HotelDTOs;
 using TABP.Application.DTOs.HotelImageDTOs;
@@ -57,5 +58,9 @@ public class HotelProfile : Profile
         CreateMap<Hotel, HotelForAdminResponseDto>()
             .ForMember(dto => dto.OwnerName, opt => opt.MapFrom(h => h.Owner.FirstName + " " + h.Owner.LastName))
             .ForMember(dto => dto.NumberOfRooms, opt => opt.MapFrom(h => h.RoomTypes.Sum(rt => rt.Rooms.Count)));
+
+        CreateMap<Hotel, HotelForCreationResponseDto>();
+        CreateMap<CreateHotelCommand, Hotel>();
+        CreateMap<HotelForCreationRequestDto, CreateHotelCommand>();
     }
 }
