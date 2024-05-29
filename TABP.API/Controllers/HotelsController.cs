@@ -1,6 +1,7 @@
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using TABP.Application.Commands.Hotels;
 using TABP.Application.DTOs.HotelDTOs;
 using TABP.Application.DTOs.RoomTypeDTOs;
 using TABP.Application.Queries.Hotels;
@@ -74,5 +75,15 @@ public class HotelsController : ControllerBase
         var hotels = await _mediator.Send(new GetAllHotelsForAdminQuery(), cancellationToken);
         
         return Ok(hotels);
+    }
+    
+    [HttpDelete("{hotelId}")]
+    public async Task<ActionResult> DeleteHotel(Guid hotelId, CancellationToken cancellationToken = default)
+    {
+        var command = new DeleteHotelCommand { HotelId = hotelId };
+        
+        await _mediator.Send(command, cancellationToken);
+        
+        return NoContent();
     }
 }
