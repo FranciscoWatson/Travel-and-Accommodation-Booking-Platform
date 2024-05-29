@@ -62,5 +62,7 @@ public class HotelProfile : Profile
         CreateMap<Hotel, HotelForCreationResponseDto>();
         CreateMap<CreateHotelCommand, Hotel>();
         CreateMap<HotelForCreationRequestDto, CreateHotelCommand>();
+        CreateMap<UpdateHotelCommand, Hotel>();
+        CreateMap<HotelForUpdateRequestDto, UpdateHotelCommand>();
     }
 }

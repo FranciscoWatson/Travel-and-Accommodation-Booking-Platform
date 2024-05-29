@@ -111,5 +111,13 @@ public class HotelsController : ControllerBase
         return CreatedAtAction(nameof(GetHotel), new { hotelId = hotel.HotelId }, hotel);
     }
     
-    
+    [HttpPut("{hotelId}")]
+    public async Task<ActionResult> UpdateHotel(Guid hotelId, HotelForUpdateRequestDto hotelForUpdateRequestDto, CancellationToken cancellationToken = default)
+    {
+        var command = new UpdateHotelCommand { HotelId = hotelId };
+        _mapper.Map(hotelForUpdateRequestDto, command);
+        await _mediator.Send(command, cancellationToken);
+        
+        return NoContent();
+    }
 }
