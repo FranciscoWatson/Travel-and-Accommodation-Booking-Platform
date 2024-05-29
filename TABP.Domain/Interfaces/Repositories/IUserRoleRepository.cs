@@ -1,6 +1,6 @@
 using TABP.Domain.Entities;
 
-namespace TABP.Application.Interfaces.Repositories;
+namespace TABP.Domain.Interfaces.Repositories;
 
 public interface IUserRoleRepository
 {

@@ -1,9 +1,7 @@
-using TABP.Application.DTOs.HotelDTOs;
-using TABP.Application.Queries.Hotels;
 using TABP.Domain.Entities;
 using TABP.Domain.Models;
 
-namespace TABP.Application.Interfaces.Repositories;
+namespace TABP.Domain.Interfaces.Repositories;
 
 public interface IHotelRepository
 {
@@ -13,6 +11,6 @@ public interface IHotelRepository
     public Task<Hotel> CreateAsync(Hotel hotel);
     public Task UpdateAsync(Hotel hotel);
     public Task DeleteAsync(Guid id);
-    public Task<List<HotelSearch>> SearchAndFilterHotelsAsync(SearchAndFilterHotelsQuery request);
+    public Task<List<HotelSearch>> SearchAndFilterHotelsAsync(IHotelSearchCriteria request);
     public Task<List<FeaturedDeal>> GetFeaturedDealsAsync(int count);
 }

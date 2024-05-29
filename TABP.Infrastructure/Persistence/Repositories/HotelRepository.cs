@@ -1,8 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using TABP.Application.DTOs.HotelDTOs;
-using TABP.Application.Interfaces.Repositories;
 using TABP.Application.Queries.Hotels;
 using TABP.Domain.Entities;
+using TABP.Domain.Interfaces;
+using TABP.Domain.Interfaces.Repositories;
 using TABP.Domain.Models;
 
 namespace TABP.Infrastructure.Persistence.Repositories;
@@ -58,7 +59,7 @@ public class HotelRepository : IHotelRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<List<HotelSearch>> SearchAndFilterHotelsAsync(SearchAndFilterHotelsQuery request)
+    public async Task<List<HotelSearch>> SearchAndFilterHotelsAsync(IHotelSearchCriteria request)
     {
         IQueryable<Hotel> query = _context.Hotels
             .Include(h => h.HotelAmenities).ThenInclude(ha => ha.Amenity)
@@ -120,7 +121,7 @@ public class HotelRepository : IHotelRepository
         return minRating == null ? query : query.Where(h => h.StarRating >= minRating.Value);
     } 
     
-    private IQueryable<Hotel> FilterByRoomsAndAvailability(IQueryable<Hotel> query, SearchAndFilterHotelsQuery request)
+    private IQueryable<Hotel> FilterByRoomsAndAvailability(IQueryable<Hotel> query, IHotelSearchCriteria request)
     {
         if (!string.IsNullOrEmpty(request.RoomType))
         {

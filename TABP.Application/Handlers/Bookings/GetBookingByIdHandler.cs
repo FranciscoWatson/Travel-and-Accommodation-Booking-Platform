@@ -1,8 +1,8 @@
 using AutoMapper;
 using MediatR;
 using TABP.Application.DTOs.BookingDTOs;
-using TABP.Application.Interfaces.Repositories;
 using TABP.Application.Queries.Bookings;
+using TABP.Domain.Interfaces.Repositories;
 
 namespace TABP.Application.Handlers.Bookings;
 

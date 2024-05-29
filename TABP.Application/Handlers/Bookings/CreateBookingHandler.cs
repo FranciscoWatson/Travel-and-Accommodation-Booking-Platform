@@ -1,8 +1,8 @@
 using MediatR;
 using TABP.Application.Commands.Bookings;
 using TABP.Application.DTOs.BookingDTOs;
-using TABP.Application.Interfaces.Repositories;
 using TABP.Domain.Entities;
+using TABP.Domain.Interfaces.Repositories;
 
 namespace TABP.Application.Handlers.Bookings;
 

@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using TABP.Application.Interfaces.Repositories;
 using TABP.Domain.Entities;
+using TABP.Domain.Interfaces.Repositories;
 
 namespace TABP.Infrastructure.Persistence.Repositories;
 

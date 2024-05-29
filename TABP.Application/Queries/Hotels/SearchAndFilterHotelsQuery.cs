@@ -1,9 +1,10 @@
 using MediatR;
 using TABP.Application.DTOs.HotelDTOs;
+using TABP.Domain.Interfaces;
 
 namespace TABP.Application.Queries.Hotels;
 
-public class SearchAndFilterHotelsQuery : IRequest<List<HotelSearchResponseDto>>
+public class SearchAndFilterHotelsQuery : IRequest<List<HotelSearchResponseDto>>, IHotelSearchCriteria
 {
     public DateTime CheckIn { get; set; }
     public DateTime CheckOut { get; set; }

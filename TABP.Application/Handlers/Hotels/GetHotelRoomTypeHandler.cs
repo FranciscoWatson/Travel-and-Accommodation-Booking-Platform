@@ -1,8 +1,8 @@
 using AutoMapper;
 using MediatR;
 using TABP.Application.DTOs.RoomTypeDTOs;
-using TABP.Application.Interfaces.Repositories;
 using TABP.Application.Queries.Hotels;
+using TABP.Domain.Interfaces.Repositories;
 
 namespace TABP.Application.Handlers.Hotels;
 

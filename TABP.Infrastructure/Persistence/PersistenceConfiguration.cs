@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using TABP.Application.Interfaces.Repositories;
+using TABP.Domain.Interfaces.Repositories;
 using TABP.Infrastructure.Persistence.Repositories;
 
 namespace TABP.Infrastructure.Persistence;

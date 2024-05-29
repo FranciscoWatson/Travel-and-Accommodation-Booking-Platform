@@ -1,8 +1,8 @@
 using AutoMapper;
 using MediatR;
 using TABP.Application.DTOs.CityDTOs;
-using TABP.Application.Interfaces.Repositories;
 using TABP.Application.Queries.Cities;
+using TABP.Domain.Interfaces.Repositories;
 
 namespace TABP.Application.Handlers.Cities;
 
