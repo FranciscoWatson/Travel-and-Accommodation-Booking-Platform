@@ -21,5 +21,9 @@ public class CityProfile : Profile
         CreateMap<CreateCityCommand, City>();
         
         CreateMap<City, CityForCreationResponseDto >();
+        
+        CreateMap<CityForUpdateRequestDto, UpdateCityCommand>();
+        
+        CreateMap<UpdateCityCommand, City>();
     }
 }

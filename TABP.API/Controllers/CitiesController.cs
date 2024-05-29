@@ -41,15 +41,6 @@ public class CitiesController : ControllerBase
         return Ok(cities);
     }
     
-    [HttpPost]
-    public async Task<ActionResult<CityForCreationResponseDto>> CreateCity(CityForCreationRequestDto cityForCreationRequestDto, CancellationToken cancellationToken = default)
-    {
-        var command = _mapper.Map<CreateCityCommand>(cityForCreationRequestDto);
-        var city = await _mediator.Send(command, cancellationToken);
-        
-        return CreatedAtAction(nameof(GetCity), new { cityId = city.CityId }, city);
-    }
-    
     [HttpGet("trending")]
     public async Task<ActionResult<IEnumerable<TrendingCityResponseDto>>> GetTrendingCities(int count = 5,
         CancellationToken cancellationToken = default)
@@ -59,6 +50,25 @@ public class CitiesController : ControllerBase
         var cities = await _mediator.Send(query, cancellationToken);
         
         return Ok(cities);
+    }
+    
+    [HttpPost]
+    public async Task<ActionResult<CityForCreationResponseDto>> CreateCity(CityForCreationRequestDto cityForCreationRequestDto, CancellationToken cancellationToken = default)
+    {
+        var command = _mapper.Map<CreateCityCommand>(cityForCreationRequestDto);
+        var city = await _mediator.Send(command, cancellationToken);
+        
+        return CreatedAtAction(nameof(GetCity), new { cityId = city.CityId }, city);
+    }
+    
+    [HttpPut("{cityId}")]
+    public async Task<ActionResult> UpdateCity(Guid cityId, CityForUpdateRequestDto cityForUpdateRequestDto, CancellationToken cancellationToken = default)
+    {
+        var command = new UpdateCityCommand { CityId = cityId };
+        _mapper.Map(cityForUpdateRequestDto, command);
+        await _mediator.Send(command, cancellationToken);
+        
+        return NoContent();
     }
     
     [HttpDelete("{cityId}")]
