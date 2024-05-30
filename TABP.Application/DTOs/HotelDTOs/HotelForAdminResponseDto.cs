@@ -7,4 +7,6 @@ public class HotelForAdminResponseDto
     public float StarRating { get; set; }
     public string OwnerName { get; set; }
     public int NumberOfRooms { get; set; }
+    public DateTime CreatedDate { get; set; }
+    public DateTime? LastModifiedDate { get; set; }
 }
