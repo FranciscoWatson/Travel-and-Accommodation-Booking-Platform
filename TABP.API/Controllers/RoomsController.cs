@@ -1,6 +1,7 @@
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using TABP.Application.Commands.Rooms;
 using TABP.Application.DTOs.RoomDTOs;
 using TABP.Application.Queries.Rooms;
 
@@ -39,5 +40,15 @@ public class RoomsController : ControllerBase
         var rooms = await _mediator.Send(query, cancellationToken);
         
         return Ok(rooms);
+    }
+    
+    [HttpDelete]
+    public async Task<ActionResult> DeleteRoom(Guid roomId, CancellationToken cancellationToken = default)
+    {
+        var command = new DeleteRoomCommand() { RoomId = roomId };
+        
+        await _mediator.Send(command, cancellationToken);
+        
+        return NoContent();
     }
 }
