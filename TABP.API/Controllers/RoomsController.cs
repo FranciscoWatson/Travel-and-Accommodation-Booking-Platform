@@ -51,4 +51,16 @@ public class RoomsController : ControllerBase
         
         return NoContent();
     }
+    
+    [HttpPost]
+    public async Task<ActionResult<RoomForAdminResponseDto>> CreateRoom(
+        [FromBody] RoomForCreationRequestDto roomForCreationRequestDto,
+        CancellationToken cancellationToken = default)
+    {
+        var command = _mapper.Map<CreateRoomCommand>(roomForCreationRequestDto);
+        
+        var room = await _mediator.Send(command, cancellationToken);
+        
+        return CreatedAtAction(nameof(GetRoom), new { roomId = room.RoomId }, room);
+    }
 }
