@@ -10,5 +10,10 @@ public class RoomProfile : Profile
     {
         CreateMap<Room, RoomDto>()
             .ForMember(dto => dto.RoomTypeName, opt => opt.MapFrom(src => src.RoomType.Name));
+        
+        CreateMap<Room, RoomForAdminResponseDto>()
+            .ForMember(dto => dto.Available, opt => opt.MapFrom(src => !src.BookingRooms.Any(br => br.Booking.CheckIn <= DateTime.Now && br.Booking.CheckOut >= DateTime.Now)))
+            .ForMember(dto => dto.AdultsCapacity, opt => opt.MapFrom(src => src.RoomType.AdultsCapacity))
+            .ForMember(dto => dto.ChildrenCapacity, opt => opt.MapFrom(src => src.RoomType.ChildrenCapacity));
     }
 }

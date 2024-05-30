@@ -50,4 +50,13 @@ public class RoomRepository : IRoomRepository
             .Where(r => r.RoomTypeId == roomTypeId && r.BookingRooms.All(br => br.Booking.CheckOut <= checkIn || br.Booking.CheckIn >= checkOut))
             .ToListAsync();
     }
+
+    public async Task<Room?> GetByIdAdminAsync(Guid roomId)
+    {
+        var room = await _context.Rooms
+            .Include(r => r.RoomType)
+            .Include(r => r.BookingRooms).ThenInclude(br => br.Booking)
+            .FirstOrDefaultAsync(r => r.RoomId == roomId);
+        return room;
+    }
 }

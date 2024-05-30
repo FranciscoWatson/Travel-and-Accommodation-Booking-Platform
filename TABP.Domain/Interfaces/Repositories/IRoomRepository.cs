@@ -10,4 +10,5 @@ public interface IRoomRepository
     Task UpdateAsync(Room room);
     Task DeleteAsync(Guid id);
     Task<List<Room>> GetAvailableRoomsByTypeIdAsync(Guid roomTypeId, DateTime checkIn, DateTime checkOut);
+    Task<Room?> GetByIdAdminAsync(Guid roomId);
 }
