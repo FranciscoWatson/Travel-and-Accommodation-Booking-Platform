@@ -30,4 +30,14 @@ public class RoomsController : ControllerBase
         
         return Ok(room);
     }
+    
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<RoomForAdminResponseDto>>> GetRoomsForAdmin(CancellationToken cancellationToken = default)
+    {
+        var query = new GetAllRoomsForAdminQuery();
+        
+        var rooms = await _mediator.Send(query, cancellationToken);
+        
+        return Ok(rooms);
+    }
 }

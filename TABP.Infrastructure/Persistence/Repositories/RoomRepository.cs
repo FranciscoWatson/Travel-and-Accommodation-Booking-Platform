@@ -59,4 +59,12 @@ public class RoomRepository : IRoomRepository
             .FirstOrDefaultAsync(r => r.RoomId == roomId);
         return room;
     }
+
+    public async Task<List<Room>> GetAllForAdminAsync()
+    {
+        return await _context.Rooms
+            .Include(r => r.RoomType)
+            .Include(r => r.BookingRooms).ThenInclude(br => br.Booking)
+            .ToListAsync();
+    }
 }
