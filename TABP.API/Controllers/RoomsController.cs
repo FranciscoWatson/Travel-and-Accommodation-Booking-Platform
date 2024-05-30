@@ -63,4 +63,14 @@ public class RoomsController : ControllerBase
         
         return CreatedAtAction(nameof(GetRoom), new { roomId = room.RoomId }, room);
     }
+    
+    [HttpPut("{roomId}")]
+    public async Task<ActionResult> UpdateRoom(Guid roomId, RoomForUpdateRequestDto roomForUpdateRequestDto, CancellationToken cancellationToken = default)
+    {
+        var command = new UpdateRoomCommand { RoomId = roomId };
+        _mapper.Map(roomForUpdateRequestDto, command);
+        await _mediator.Send(command, cancellationToken);
+        
+        return NoContent();
+    }
 }

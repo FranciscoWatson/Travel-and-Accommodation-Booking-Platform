@@ -20,5 +20,8 @@ public class RoomProfile : Profile
         CreateMap<RoomForCreationRequestDto, CreateRoomCommand>();
         CreateMap<CreateRoomCommand, Room>();
         CreateMap<Room, RoomForCreationResponseDto>();
+        
+        CreateMap<RoomForUpdateRequestDto, UpdateRoomCommand>();
+        CreateMap<UpdateRoomCommand, Room>();
     }
 }
