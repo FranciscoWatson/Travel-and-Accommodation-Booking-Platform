@@ -19,7 +19,7 @@ public class AuthenticationController : ControllerBase
     }
     
     [HttpPost("authenticate")]
-    public async Task<ActionResult<object>> Login(LoginRequestBody loginRequestBody)
+    public async Task<ActionResult<LoginResponse>> Login(LoginRequestBody loginRequestBody)
     {
         try
         {
