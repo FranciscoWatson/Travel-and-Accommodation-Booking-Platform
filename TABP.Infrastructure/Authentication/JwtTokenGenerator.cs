@@ -3,6 +3,7 @@ using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using TABP.Domain.Entities;
 using TABP.Domain.Interfaces.Authentication;
+using TABP.Domain.Models;
 
 namespace TABP.Infrastructure.Authentication;
 
@@ -14,7 +15,7 @@ public class JwtTokenGenerator : IJwtTokenGenerator
     {
         _jwtAuthenticationConfig = jwtAuthenticationConfig;
     }
-    public string GenerateToken(User user)
+    public TokenInfo GenerateToken(User user)
     {
         var securityKey = new SymmetricSecurityKey(Convert.FromBase64String(_jwtAuthenticationConfig.SecretKey));
 
@@ -22,22 +23,31 @@ public class JwtTokenGenerator : IJwtTokenGenerator
 
         var claimsForTokens = new List<Claim>
         {
-            new Claim("sub", user.UserId.ToString()),
-            new Claim("given_name", user.FirstName),
-            new Claim("family_name", user.LastName)
+            new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
+            new Claim(ClaimTypes.GivenName, user.FirstName),
+            new Claim(ClaimTypes.Surname, user.LastName),
+            new Claim(ClaimTypes.Role, user.UserRole.Name)
         };
 
+        var expiration = DateTime.UtcNow.AddMinutes(_jwtAuthenticationConfig.TokenExpiryInMinutes);
+        
         var jwtSecurityToken = new JwtSecurityToken(
             issuer: _jwtAuthenticationConfig.Issuer,
             audience: _jwtAuthenticationConfig.Audience,
             claims: claimsForTokens,
-            DateTime.UtcNow,
-            DateTime.UtcNow.AddMinutes(_jwtAuthenticationConfig.TokenExpiryInMinutes),
+            notBefore: DateTime.UtcNow,
+            expires: expiration,
             signingCredentials: signingCredentials
         );
 
         var token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
 
-        return token;
+        return new TokenInfo
+        {
+            Token = token,
+            TokenType = "Bearer",
+            ExpiresAt = expiration,
+            User = user
+        };
     }
 }

@@ -82,4 +82,11 @@ public class UserRepository : IUserRepository
 
         return recentlyVisitedHotels;
     }
+    
+    public async Task<User?> AuthenticateAsync(string username, string password)
+    {
+        return await _context.Users
+            .Include(u => u.UserRole)
+            .FirstOrDefaultAsync(u => u.UserName == username && u.Password == password);
+    }
 }

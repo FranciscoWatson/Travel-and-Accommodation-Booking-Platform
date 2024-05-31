@@ -11,4 +11,5 @@ public interface IUserRepository
     public Task UpdateAsync(User user);
     public Task DeleteAsync(Guid id);
     Task<List<RecentlyVisitedHotel>> GetRecentlyVisitedHotelsAsync(Guid id, int count);
+    Task<User?> AuthenticateAsync(string username, string password);
 }
