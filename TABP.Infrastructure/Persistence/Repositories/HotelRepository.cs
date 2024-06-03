@@ -187,16 +187,15 @@ public class HotelRepository : IHotelRepository
                 StarRating = hotel.StarRating,
                 ThumbnailUrl = hotel.ThumbnailUrl,
                 DiscountPercentage = hotel.RoomTypes
-                        .SelectMany(rt => rt.Discounts)
-                        .Where(d => d.StartDate <= currentDate && d.EndDate >= currentDate)
-                        .Max(d => d.Percentage),
-                OriginalPrice = hotel.RoomTypes.Min(rt => rt.Price),
-                DiscountedPrice = hotel.RoomTypes
                     .SelectMany(rt => rt.Discounts)
                     .Where(d => d.StartDate <= currentDate && d.EndDate >= currentDate)
-                    .Max(d => 1 - (decimal)(d.Percentage / 100)) * hotel.RoomTypes.Min(rt => rt.Price)
+                    .Max(d => d.Percentage),
+                OriginalPrice = hotel.RoomTypes.Min(rt => rt.Price)
             })
             .ToListAsync();
+        
+        featuredDeals.ForEach(deal => 
+            deal.DiscountedPrice = deal.OriginalPrice * (decimal)(1 - (deal.DiscountPercentage / 100)));
 
         return featuredDeals;
     }
