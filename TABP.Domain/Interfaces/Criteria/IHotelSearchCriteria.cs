@@ -11,6 +11,6 @@ public interface IHotelSearchCriteria
     string? HotelName { get; }
     string? City { get; }
     decimal? MaxPrice { get; }
-    int? MinRating { get; }
+    float? MinRating { get; }
     List<Guid>? Amenities { get; }
 }

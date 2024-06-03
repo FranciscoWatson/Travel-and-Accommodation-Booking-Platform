@@ -11,6 +11,6 @@ public class HotelSearchRequestDto
     public string? HotelName { get; set; }
     public string? City { get; set; }
     public decimal? MaxPrice { get; init; }
-    public int? MinRating { get; init; }
+    public float? MinRating { get; init; }
     public List<Guid>? Amenities { get; init; }
 }

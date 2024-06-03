@@ -136,7 +136,7 @@ public class HotelRepository : IHotelRepository
         return string.IsNullOrWhiteSpace(city) ? query : query.Where(h => h.City.Name == city);
     }
 
-    private IQueryable<Hotel> FilterByRating(IQueryable<Hotel> query, int? minRating)
+    private IQueryable<Hotel> FilterByRating(IQueryable<Hotel> query, float? minRating)
     {
         return minRating == null ? query : query.Where(h => h.StarRating >= minRating.Value);
     } 
