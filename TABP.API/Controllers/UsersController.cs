@@ -1,5 +1,6 @@
 using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TABP.Application.DTOs.HotelDTOs;
 using TABP.Application.Queries.Hotels;
@@ -20,12 +21,15 @@ public class UsersController : ControllerBase
         _mapper = mapper;
     }
     
-    [HttpGet("recently-visited-hotels")]
+    [HttpGet("{userId}/recently-visited-hotels")]
+    [Authorize(Roles = "Guest", Policy = "MatchUserId")]
     public async Task<ActionResult<IEnumerable<RecentlyVisitedHotelResponseDto>>> GetRecentlyVisitedHotels(
+        Guid userId,
         [FromQuery] RecentlyVisitedHotelRequestDto recentlyVisitedHotelRequestDto,
         CancellationToken cancellationToken = default)
     {
-        var query = _mapper.Map<GetRecentlyVisitedHotelsQuery>(recentlyVisitedHotelRequestDto);
+        var query = new GetRecentlyVisitedHotelsQuery() { UserId = userId };
+        _mapper.Map(recentlyVisitedHotelRequestDto, query);
         
         var hotels = await _mediator.Send(query, cancellationToken);
         
