@@ -45,43 +45,33 @@ public class UserRepository : IUserRepository
         await _context.SaveChangesAsync();
     }
     
-    public async Task<List<RecentlyVisitedHotel>> GetRecentlyVisitedHotelsAsync(Guid userId, int count)
-    {
-        var bookings = await _context.Users
-            .Where(u => u.UserId == userId)
-            .SelectMany(u => u.Bookings)
-            .Select(b => new
-            {
-                HotelId = b.BookingRooms.First().Room.RoomType.Hotel.HotelId,
-                HotelName = b.BookingRooms.First().Room.RoomType.Hotel.Name,
-                CheckOut = b.CheckOut,
-                TotalPrice = b.PriceAtBooking,
-                CityName = b.BookingRooms.First().Room.RoomType.Hotel.City.Name,
-                StarRating = b.BookingRooms.First().Room.RoomType.Hotel.StarRating,
-                ThumbnailImage = b.BookingRooms.First().Room.RoomType.Hotel.HotelImages.First().Url
-                
-            })
-            .OrderByDescending(b => b.CheckOut)
-            .ToListAsync();
+   public async Task<List<RecentlyVisitedHotel>> GetRecentlyVisitedHotelsAsync(Guid userId, int count)
+      {
+          var recentlyVisitedHotels = await _context.Bookings
+              .Include(b => b.BookingRooms)
+              .ThenInclude(br => br.Room)
+              .ThenInclude(r => r.RoomType)
+              .ThenInclude(rt => rt.Hotel)
+              .ThenInclude(h => h.City)
+              .Where(b => b.UserId == userId)
+              .SelectMany(b => b.BookingRooms)
+              .GroupBy(br => br.Room.RoomType.Hotel.HotelId)
+              .Select(g => new RecentlyVisitedHotel
+              {
+                  HotelId = g.Key,
+                  HotelName = g.First().Room.RoomType.Hotel.Name,
+                  PricePaid = g.OrderByDescending(br => br.Booking.CheckOut).First().Booking.PriceAtBooking,
+                  LastVisited = g.Max(br => br.Booking.CheckOut),
+                  ThumbnailImage = g.First().Room.RoomType.Hotel.ThumbnailUrl,
+                  CityName = g.First().Room.RoomType.Hotel.City.Name,
+                  StarRating = g.First().Room.RoomType.Hotel.StarRating
+              })
+              .OrderByDescending(h => h.LastVisited)
+              .Take(count)
+              .ToListAsync();
 
-        var recentlyVisitedHotels = bookings
-            .GroupBy(b => b.HotelId)
-            .Select(g => new RecentlyVisitedHotel
-            {
-                HotelId = g.Key,
-                HotelName = g.First().HotelName,
-                PricePaid = g.First().TotalPrice,
-                LastVisited = g.First().CheckOut,
-                CityName = g.First().CityName,
-                ThumbnailImage = g.First().ThumbnailImage,
-                StarRating = g.First().StarRating
-            })
-            .OrderByDescending(h => h.LastVisited)
-            .Take(count)
-            .ToList();
-
-        return recentlyVisitedHotels;
-    }
+          return recentlyVisitedHotels;
+      }
     
     public async Task<User?> AuthenticateAsync(string username, string password)
     {
