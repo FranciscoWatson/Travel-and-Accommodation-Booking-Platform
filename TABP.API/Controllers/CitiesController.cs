@@ -1,5 +1,6 @@
 using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TABP.Application.Commands.Cities;
 using TABP.Application.DTOs.CityDTOs;
@@ -22,6 +23,7 @@ public class CitiesController : ControllerBase
     }
     
     [HttpGet("{cityId}")]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult<CityForAdminDto>> GetCity(Guid cityId, CancellationToken cancellationToken = default)
     {
         var query = new GetCityByIdQuery { CityId = cityId };
@@ -32,6 +34,7 @@ public class CitiesController : ControllerBase
     }
     
     [HttpGet]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult<IEnumerable<CityForAdminDto>>> GetCities(CancellationToken cancellationToken = default)
     {
         var query = new GetCitiesQuery();
@@ -42,6 +45,7 @@ public class CitiesController : ControllerBase
     }
     
     [HttpGet("trending")]
+    [AllowAnonymous]
     public async Task<ActionResult<IEnumerable<TrendingCityResponseDto>>> GetTrendingCities(int count = 5,
         CancellationToken cancellationToken = default)
     {
@@ -53,6 +57,7 @@ public class CitiesController : ControllerBase
     }
     
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult<CityForCreationResponseDto>> CreateCity(CityForCreationRequestDto cityForCreationRequestDto, CancellationToken cancellationToken = default)
     {
         var command = _mapper.Map<CreateCityCommand>(cityForCreationRequestDto);
@@ -62,6 +67,7 @@ public class CitiesController : ControllerBase
     }
     
     [HttpPut("{cityId}")]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult> UpdateCity(Guid cityId, CityForUpdateRequestDto cityForUpdateRequestDto, CancellationToken cancellationToken = default)
     {
         var command = new UpdateCityCommand { CityId = cityId };
@@ -72,6 +78,7 @@ public class CitiesController : ControllerBase
     }
     
     [HttpDelete("{cityId}")]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult> DeleteCity(Guid cityId, CancellationToken cancellationToken = default)
     {
         var command = new DeleteCityCommand { CityId = cityId };

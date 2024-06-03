@@ -1,5 +1,6 @@
 using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TABP.Application.Commands.Bookings;
 using TABP.Application.DTOs.BookingDTOs;
@@ -9,6 +10,7 @@ namespace Travel_and_Accommodation_Booking_Platform.Controllers;
 
 [ApiController]
 [Route("/api/bookings")]
+
 public class BookingsController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -21,6 +23,8 @@ public class BookingsController : ControllerBase
     }
     
     [HttpGet("{BookingId}")]
+    [Authorize(Roles = "Guest")]
+
     public async Task<ActionResult<BookingDto>> GetBooking(
         Guid BookingId, CancellationToken cancellationToken)
     {
@@ -32,6 +36,7 @@ public class BookingsController : ControllerBase
     }
     
     [HttpPost]
+    [Authorize(Roles = "Guest")]
     public async Task<ActionResult> CreateBooking([FromBody] CreateBookingRequestDto createBookingRequestDto, CancellationToken cancellationToken = default)
     {
         var command = _mapper.Map<CreateBookingCommand>(createBookingRequestDto);

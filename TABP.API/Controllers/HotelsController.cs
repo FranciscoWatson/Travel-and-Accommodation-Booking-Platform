@@ -1,5 +1,6 @@
 using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TABP.Application.Commands.Hotels;
 using TABP.Application.DTOs.HotelDTOs;
@@ -22,6 +23,7 @@ public class HotelsController : ControllerBase
     }
     
     [HttpGet]
+    [AllowAnonymous]
     public async Task<ActionResult<IEnumerable<HotelFullDetailsDto>>> GetHotels(CancellationToken cancellationToken = default)
     {
         var hotels = await _mediator.Send(new GetAllHotelsWithFullDetailsQuery(), cancellationToken);
@@ -31,6 +33,7 @@ public class HotelsController : ControllerBase
 
     
     [HttpGet("search")]
+    [AllowAnonymous]
     public async Task<ActionResult<IEnumerable<HotelSearchResponseDto>>> SearchHotels(
         [FromQuery] HotelSearchRequestDto hotelSearchRequest,
         CancellationToken cancellationToken = default)
@@ -43,6 +46,7 @@ public class HotelsController : ControllerBase
     }
     
     [HttpGet("featured-deals")]
+    [AllowAnonymous]
     public async Task<ActionResult<IEnumerable<HotelSearchResponseDto>>> GetHotelsFeaturedDeals(
         [FromQuery] HotelFeaturedDealsRequestDto hotelsFeaturedDealsRequest,
         CancellationToken cancellationToken = default)
@@ -55,6 +59,7 @@ public class HotelsController : ControllerBase
     }
     
     [HttpGet("{hotelId}/room-types")]
+    [AllowAnonymous]
     public async Task<ActionResult<IEnumerable<RoomTypeWithDiscountResponseDto>>> GetHotelRoomTypes(
         [FromRoute] Guid hotelId,
         [FromQuery] RoomTypeWithDiscountRequestDto roomTypeWithDiscountRequestDto,
@@ -68,9 +73,8 @@ public class HotelsController : ControllerBase
         return Ok(roomTypes);
     }
     
-    // ------Admins (Add Auth Later)-------
-    
     [HttpGet("{hotelId}")]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult<HotelForAdminResponseDto>> GetHotel(Guid hotelId, CancellationToken cancellationToken = default)
     {
         var query = new GetHotelByIdQuery { HotelId = hotelId };
@@ -80,8 +84,8 @@ public class HotelsController : ControllerBase
         return Ok(hotel);
     }
     
-    
     [HttpGet("admin")]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult<IEnumerable<HotelForAdminResponseDto>>> GetHotelsForAdmins(CancellationToken cancellationToken = default)
     {
         var hotels = await _mediator.Send(new GetAllHotelsForAdminQuery(), cancellationToken);
@@ -90,6 +94,7 @@ public class HotelsController : ControllerBase
     }
     
     [HttpDelete("{hotelId}")]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult> DeleteHotel(Guid hotelId, CancellationToken cancellationToken = default)
     {
         var command = new DeleteHotelCommand { HotelId = hotelId };
@@ -100,6 +105,7 @@ public class HotelsController : ControllerBase
     }
     
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult<HotelForAdminResponseDto>> CreateHotel(
         [FromBody] HotelForCreationRequestDto hotelForCreationRequestDto,
         CancellationToken cancellationToken = default)
@@ -112,6 +118,7 @@ public class HotelsController : ControllerBase
     }
     
     [HttpPut("{hotelId}")]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult> UpdateHotel(Guid hotelId, HotelForUpdateRequestDto hotelForUpdateRequestDto, CancellationToken cancellationToken = default)
     {
         var command = new UpdateHotelCommand { HotelId = hotelId };

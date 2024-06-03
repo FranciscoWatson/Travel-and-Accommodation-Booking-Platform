@@ -1,5 +1,6 @@
 using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TABP.Application.Commands.Rooms;
 using TABP.Application.DTOs.RoomDTOs;
@@ -20,9 +21,8 @@ public class RoomsController : ControllerBase
         _mapper = mapper;
     }
     
-    // -----Admin Methods (add auth later)-----
-
     [HttpGet("{roomId}")]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult<RoomForAdminResponseDto>> GetRoom(Guid roomId, CancellationToken cancellationToken = default)
     {
         var query = new GetRoomByIdQuery() { RoomId = roomId };
@@ -33,6 +33,7 @@ public class RoomsController : ControllerBase
     }
     
     [HttpGet]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult<IEnumerable<RoomForAdminResponseDto>>> GetRoomsForAdmin(CancellationToken cancellationToken = default)
     {
         var query = new GetAllRoomsForAdminQuery();
@@ -43,6 +44,7 @@ public class RoomsController : ControllerBase
     }
     
     [HttpDelete]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult> DeleteRoom(Guid roomId, CancellationToken cancellationToken = default)
     {
         var command = new DeleteRoomCommand() { RoomId = roomId };
@@ -53,6 +55,7 @@ public class RoomsController : ControllerBase
     }
     
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult<RoomForAdminResponseDto>> CreateRoom(
         [FromBody] RoomForCreationRequestDto roomForCreationRequestDto,
         CancellationToken cancellationToken = default)
@@ -65,6 +68,7 @@ public class RoomsController : ControllerBase
     }
     
     [HttpPut("{roomId}")]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult> UpdateRoom(Guid roomId, RoomForUpdateRequestDto roomForUpdateRequestDto, CancellationToken cancellationToken = default)
     {
         var command = new UpdateRoomCommand { RoomId = roomId };
