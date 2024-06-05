@@ -2,7 +2,7 @@ using System.Reflection;
 using Microsoft.OpenApi.Models;
 using TABP.Application;
 using TABP.Infrastructure;
-using TABP.Infrastructure.Persistence;
+using Travel_and_Accommodation_Booking_Platform.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,6 +39,8 @@ builder.Services.AddSwaggerGen(c =>
             Array.Empty<string>()
         }
     });
+    
+    c.OperationFilter<DefaultResponseOperationFilter>();
 });
 
 builder.Services.AddControllers();
