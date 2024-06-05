@@ -8,6 +8,8 @@ using TABP.Application.Validators.AuthenticationValidators;
 
 namespace Travel_and_Accommodation_Booking_Platform.Controllers;
 
+[ApiController]
+[Route("api/authentication")]
 public class AuthenticationController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -19,7 +21,17 @@ public class AuthenticationController : ControllerBase
         _mapper = mapper;
     }
     
-    [HttpPost("authenticate")]
+    /// <summary>
+    /// Authenticates a user and returns a JWT token if successful.
+    /// </summary>
+    /// <param name="loginRequestBody">The login credentials.</param>
+    /// <returns>Returns an access token and user information if authentication is successful.</returns>
+    /// <response code="200">If the user is authenticated successfully.</response>
+    /// <response code="401">If the user credentials are invalid.</response>
+    [HttpPost("login")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<LoginResponse>> Login([FromBody] LoginRequestBody loginRequestBody)
     {
         var validator = new LoginRequestBodyValidator();

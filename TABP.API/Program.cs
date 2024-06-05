@@ -1,3 +1,4 @@
+using System.Reflection;
 using Microsoft.OpenApi.Models;
 using TABP.Application;
 using TABP.Infrastructure;
@@ -8,11 +9,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "RestaurantReservation API", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "TABP API", Version = "v1" });
     
-  //  var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-  //  var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-  //  c.IncludeXmlComments(xmlPath);
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    c.IncludeXmlComments(xmlPath);
     
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
