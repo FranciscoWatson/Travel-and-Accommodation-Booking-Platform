@@ -3,7 +3,7 @@ using TABP.Application.Responses;
 
 namespace TABP.Application.Commands.Cities;
 
-public class UpdateCityCommand : IRequest<Result>
+public class UpdateCityCommand : IRequest<Result<object>>
 {
     public Guid CityId { get; init; }
     public string Name { get; set; }

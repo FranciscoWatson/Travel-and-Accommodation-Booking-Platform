@@ -5,7 +5,7 @@ using TABP.Domain.Interfaces.Repositories;
 
 namespace TABP.Application.Handlers.Cities;
 
-public class DeleteCityHandler : IRequestHandler<DeleteCityCommand, Result>
+public class DeleteCityHandler : IRequestHandler<DeleteCityCommand, Result<object>>
 {
     private readonly ICityRepository _cityRepository;
 
@@ -14,15 +14,15 @@ public class DeleteCityHandler : IRequestHandler<DeleteCityCommand, Result>
         _cityRepository = cityRepository;
     }
 
-    public async Task<Result> Handle(DeleteCityCommand request, CancellationToken cancellationToken)
+    public async Task<Result<object>> Handle(DeleteCityCommand request, CancellationToken cancellationToken)
     {
         var city = await _cityRepository.GetByIdAsync(request.CityId);
         if (city == null)
         {
-            return Result.Fail("City not found.");
+            return Result<object>.Fail("City not found.");
         }
+
         await _cityRepository.DeleteAsync(request.CityId);
-        
-        return Result.Success();
+        return Result<object>.Success();
     }
 }

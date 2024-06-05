@@ -162,10 +162,12 @@ public class CitiesController : ControllerBase
     /// <param name="cityId">The ID of the city to update.</param>
     /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
     /// <response code="204">If the city is successfully deleted.</response>
+    /// <response code="400">If the request data is invalid.</response>
     /// <response code="401">If the user is not authenticated.</response>
     /// <response code="403">If the user is not authorized to update the city.</response>
     /// <response code="404">If the city is not found.</response>
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)] 

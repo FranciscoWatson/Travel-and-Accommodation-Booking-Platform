@@ -6,7 +6,7 @@ using TABP.Domain.Interfaces.Repositories;
 
 namespace TABP.Application.Handlers.Cities;
 
-public class UpdateCityHandler : IRequestHandler<UpdateCityCommand, Result>
+public class UpdateCityHandler : IRequestHandler<UpdateCityCommand, Result<object>>
 {
     private readonly ICityRepository _cityRepository;
     private readonly ICountryRepository _countryRepository;
@@ -19,23 +19,22 @@ public class UpdateCityHandler : IRequestHandler<UpdateCityCommand, Result>
         _countryRepository = countryRepository;
     }
 
-    public async Task<Result> Handle(UpdateCityCommand request, CancellationToken cancellationToken)
+    public async Task<Result<object>> Handle(UpdateCityCommand request, CancellationToken cancellationToken)
     {
         var city = await _cityRepository.GetByIdAsync(request.CityId);
         if (city == null)
         {
-            return Result.Fail("City not found.");
+            return Result<object>.Fail("City not found.");
         }
-        
+    
         var country = await _countryRepository.GetByIdAsync(request.CountryId);
         if (country == null)
         {
-            return Result.Fail("Country not found.");
+            return Result<object>.Fail("Country not found.");
         }
-        
+    
         _mapper.Map(request, city);
-        
         await _cityRepository.UpdateAsync(city);
-        return Result.Success();
+        return Result<object>.Success();
     }
 }
