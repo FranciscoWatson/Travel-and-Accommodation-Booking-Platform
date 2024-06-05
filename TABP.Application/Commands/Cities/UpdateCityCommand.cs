@@ -1,8 +1,9 @@
 using MediatR;
+using TABP.Application.Responses;
 
 namespace TABP.Application.Commands.Cities;
 
-public class UpdateCityCommand : IRequest
+public class UpdateCityCommand : IRequest<Result>
 {
     public Guid CityId { get; init; }
     public string Name { get; set; }

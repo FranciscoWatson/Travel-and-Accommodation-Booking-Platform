@@ -6,7 +6,7 @@ using TABP.Domain.Interfaces.Repositories;
 
 namespace TABP.Application.Handlers.Cities;
 
-public class GetCityByIdHandler : IRequestHandler<GetCityByIdQuery, CityDto>
+public class GetCityByIdHandler : IRequestHandler<GetCityByIdQuery, CityDto?>
 {
     private readonly ICityRepository _cityRepository;
     private readonly IMapper _mapper;
@@ -17,9 +17,9 @@ public class GetCityByIdHandler : IRequestHandler<GetCityByIdQuery, CityDto>
         _mapper = mapper;
     }
 
-    public async Task<CityDto> Handle(GetCityByIdQuery request, CancellationToken cancellationToken)
+    public async Task<CityDto?> Handle(GetCityByIdQuery request, CancellationToken cancellationToken)
     {
         var city = await _cityRepository.GetByIdAsync(request.CityId);
-        return _mapper.Map<CityDto>(city);
+        return city == null ? null : _mapper.Map<CityDto>(city);
     }
 }
