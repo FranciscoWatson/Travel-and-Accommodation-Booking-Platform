@@ -6,6 +6,8 @@ using TABP.Application.Commands.Hotels;
 using TABP.Application.DTOs.HotelDTOs;
 using TABP.Application.DTOs.RoomTypeDTOs;
 using TABP.Application.Queries.Hotels;
+using TABP.Application.Validators.HotelValidators;
+using TABP.Application.Validators.RoomTypeValidators;
 
 namespace Travel_and_Accommodation_Booking_Platform.Controllers;
 
@@ -38,6 +40,13 @@ public class HotelsController : ControllerBase
         [FromQuery] HotelSearchRequestDto hotelSearchRequest,
         CancellationToken cancellationToken = default)
     {
+        var validator = new HotelSearchRequestDtoValidator();
+        var validationResult = await validator.ValidateAsync(hotelSearchRequest, cancellationToken);
+        if (!validationResult.IsValid)
+        {
+            return BadRequest(validationResult.Errors);
+        }
+        
         var query = _mapper.Map<SearchAndFilterHotelsQuery>(hotelSearchRequest);
         
         var hotels = await _mediator.Send(query, cancellationToken);
@@ -51,6 +60,13 @@ public class HotelsController : ControllerBase
         [FromQuery] HotelFeaturedDealsRequestDto hotelsFeaturedDealsRequest,
         CancellationToken cancellationToken = default)
     {
+        var validator = new HotelFeaturedDealsRequestDtoValidator();
+        var validationResult = await validator.ValidateAsync(hotelsFeaturedDealsRequest, cancellationToken);
+        if (!validationResult.IsValid)
+        {
+            return BadRequest(validationResult.Errors);
+        }
+        
         var query = _mapper.Map<GetHotelsFeaturedDealsQuery>(hotelsFeaturedDealsRequest);
         
         var hotels = await _mediator.Send(query, cancellationToken);
@@ -65,6 +81,13 @@ public class HotelsController : ControllerBase
         [FromQuery] RoomTypeWithDiscountRequestDto roomTypeWithDiscountRequestDto,
         CancellationToken cancellationToken = default)
     {
+        var validator = new RoomTypeWithDiscountRequestDtoValidator();
+        var validationResult = await validator.ValidateAsync(roomTypeWithDiscountRequestDto, cancellationToken);
+        if (!validationResult.IsValid)
+        {
+            return BadRequest(validationResult.Errors);
+        }
+        
         var query = _mapper.Map<GetHotelRoomTypesQuery>(roomTypeWithDiscountRequestDto, opts => 
             opts.AfterMap((src, dest) => dest.HotelId = hotelId));
 
@@ -110,6 +133,14 @@ public class HotelsController : ControllerBase
         [FromBody] HotelForCreationRequestDto hotelForCreationRequestDto,
         CancellationToken cancellationToken = default)
     {
+        var validator = new HotelForCreationRequestDtoValidator();
+        var validationResult = await validator.ValidateAsync(hotelForCreationRequestDto, cancellationToken);
+        
+        if (!validationResult.IsValid)
+        {
+            return BadRequest(validationResult.Errors);
+        }
+        
         var command = _mapper.Map<CreateHotelCommand>(hotelForCreationRequestDto);
         
         var hotel = await _mediator.Send(command, cancellationToken);
@@ -121,6 +152,14 @@ public class HotelsController : ControllerBase
     [Authorize(Roles = "Admin")]
     public async Task<ActionResult> UpdateHotel(Guid hotelId, HotelForUpdateRequestDto hotelForUpdateRequestDto, CancellationToken cancellationToken = default)
     {
+        var validator = new HotelForUpdateRequestDtoValidator();
+        var validationResult = await validator.ValidateAsync(hotelForUpdateRequestDto, cancellationToken);
+        
+        if (!validationResult.IsValid)
+        {
+            return BadRequest(validationResult.Errors);
+        }
+        
         var command = new UpdateHotelCommand { HotelId = hotelId };
         _mapper.Map(hotelForUpdateRequestDto, command);
         await _mediator.Send(command, cancellationToken);

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using TABP.Application.Commands.Rooms;
 using TABP.Application.DTOs.RoomDTOs;
 using TABP.Application.Queries.Rooms;
+using TABP.Application.Validators.RoomValidators;
 
 namespace Travel_and_Accommodation_Booking_Platform.Controllers;
 
@@ -60,6 +61,14 @@ public class RoomsController : ControllerBase
         [FromBody] RoomForCreationRequestDto roomForCreationRequestDto,
         CancellationToken cancellationToken = default)
     {
+        var validator = new RoomForCreationRequestDtoValidator();
+        var validationResult = await validator.ValidateAsync(roomForCreationRequestDto, cancellationToken);
+        
+        if (!validationResult.IsValid)
+        {
+            return BadRequest(validationResult.Errors);
+        }
+        
         var command = _mapper.Map<CreateRoomCommand>(roomForCreationRequestDto);
         
         var room = await _mediator.Send(command, cancellationToken);
@@ -71,6 +80,14 @@ public class RoomsController : ControllerBase
     [Authorize(Roles = "Admin")]
     public async Task<ActionResult> UpdateRoom(Guid roomId, RoomForUpdateRequestDto roomForUpdateRequestDto, CancellationToken cancellationToken = default)
     {
+        var validator = new RoomForUpdateRequestDtoValidator();
+        var validationResult = await validator.ValidateAsync(roomForUpdateRequestDto, cancellationToken);
+        
+        if (!validationResult.IsValid)
+        {
+            return BadRequest(validationResult.Errors);
+        }
+        
         var command = new UpdateRoomCommand { RoomId = roomId };
         _mapper.Map(roomForUpdateRequestDto, command);
         await _mediator.Send(command, cancellationToken);

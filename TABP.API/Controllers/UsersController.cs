@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using TABP.Application.DTOs.HotelDTOs;
 using TABP.Application.Queries.Hotels;
 using TABP.Application.Queries.Users;
+using TABP.Application.Validators.HotelValidators;
 
 namespace Travel_and_Accommodation_Booking_Platform.Controllers;
 
@@ -28,6 +29,13 @@ public class UsersController : ControllerBase
         [FromQuery] RecentlyVisitedHotelRequestDto recentlyVisitedHotelRequestDto,
         CancellationToken cancellationToken = default)
     {
+        var validator = new RecentlyVisitedHotelRequestDtoValidator();
+        var validationResult = await validator.ValidateAsync(recentlyVisitedHotelRequestDto, cancellationToken);
+        if (!validationResult.IsValid)
+        {
+            return BadRequest(validationResult.Errors);
+        }
+        
         var query = new GetRecentlyVisitedHotelsQuery() { UserId = userId };
         _mapper.Map(recentlyVisitedHotelRequestDto, query);
         

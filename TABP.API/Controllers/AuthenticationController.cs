@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TABP.Application.Commands.Authentication;
 using TABP.Application.DTOs.Authentication;
+using TABP.Application.Validators.AuthenticationValidators;
 
 namespace Travel_and_Accommodation_Booking_Platform.Controllers;
 
@@ -19,8 +20,16 @@ public class AuthenticationController : ControllerBase
     }
     
     [HttpPost("authenticate")]
-    public async Task<ActionResult<LoginResponse>> Login(LoginRequestBody loginRequestBody)
+    public async Task<ActionResult<LoginResponse>> Login([FromBody] LoginRequestBody loginRequestBody)
     {
+        var validator = new LoginRequestBodyValidator();
+        var result = await validator.ValidateAsync(loginRequestBody);
+
+        if (!result.IsValid)
+        {
+            return BadRequest(result.Errors);
+        }
+        
         try
         {
             var command = _mapper.Map<LoginCommand>(loginRequestBody);

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using TABP.Application.Commands.Cities;
 using TABP.Application.DTOs.CityDTOs;
 using TABP.Application.Queries.Cities;
+using TABP.Application.Validators.CityValidators;
 
 namespace Travel_and_Accommodation_Booking_Platform.Controllers;
 
@@ -60,6 +61,14 @@ public class CitiesController : ControllerBase
     [Authorize(Roles = "Admin")]
     public async Task<ActionResult<CityForCreationResponseDto>> CreateCity(CityForCreationRequestDto cityForCreationRequestDto, CancellationToken cancellationToken = default)
     {
+        var validator = new CityForCreationRequestDtoValidator();
+        var validationResult = await validator.ValidateAsync(cityForCreationRequestDto, cancellationToken);
+        
+        if (!validationResult.IsValid)
+        {
+            return BadRequest(validationResult.Errors);
+        }
+        
         var command = _mapper.Map<CreateCityCommand>(cityForCreationRequestDto);
         var city = await _mediator.Send(command, cancellationToken);
         
@@ -70,6 +79,14 @@ public class CitiesController : ControllerBase
     [Authorize(Roles = "Admin")]
     public async Task<ActionResult> UpdateCity(Guid cityId, CityForUpdateRequestDto cityForUpdateRequestDto, CancellationToken cancellationToken = default)
     {
+        var validator = new CityForUpdateRequestDtoValidator();
+        var validationResult = await validator.ValidateAsync(cityForUpdateRequestDto, cancellationToken);
+        
+        if (!validationResult.IsValid)
+        {
+            return BadRequest(validationResult.Errors);
+        }
+        
         var command = new UpdateCityCommand { CityId = cityId };
         _mapper.Map(cityForUpdateRequestDto, command);
         await _mediator.Send(command, cancellationToken);
