@@ -28,6 +28,7 @@ public class AuthenticationController : ControllerBase
     /// <returns>Returns an access token and user information if authentication is successful.</returns>
     /// <response code="200">If the user is authenticated successfully.</response>
     /// <response code="401">If the user credentials are invalid.</response>
+    /// <response code="400">If the login request body is invalid.</response>
     [HttpPost("login")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
