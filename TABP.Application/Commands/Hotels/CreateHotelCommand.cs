@@ -1,9 +1,10 @@
 using MediatR;
 using TABP.Application.DTOs.HotelDTOs;
+using TABP.Application.Responses;
 
 namespace TABP.Application.Commands.Hotels;
 
-public class CreateHotelCommand : IRequest<HotelForCreationResponseDto>
+public class CreateHotelCommand : IRequest<Result<HotelForCreationResponseDto>>
 {
     public Guid CityId { get; set; }
     public Guid OwnerId { get; set; }

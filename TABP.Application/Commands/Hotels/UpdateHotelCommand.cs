@@ -1,8 +1,9 @@
 using MediatR;
+using TABP.Application.Responses;
 
 namespace TABP.Application.Commands.Hotels;
 
-public class UpdateHotelCommand : IRequest
+public class UpdateHotelCommand : IRequest<Result<object>>
 {
     public Guid HotelId { get; set; }
     public string Name { get; set; }
