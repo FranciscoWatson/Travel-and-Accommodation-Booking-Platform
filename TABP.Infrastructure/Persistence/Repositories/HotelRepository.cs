@@ -199,4 +199,9 @@ public class HotelRepository : IHotelRepository
 
         return featuredDeals;
     }
+    
+    public async Task<bool> ExistsAsync(Guid id)
+    {
+        return await _context.Hotels.AnyAsync(h => h.HotelId == id);
+    }
 }

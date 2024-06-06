@@ -16,4 +16,5 @@ public interface IHotelRepository
     Task DeleteAsync(Guid id);
     Task<List<HotelSearch>> SearchAndFilterHotelsAsync(IHotelSearchCriteria request);
     Task<List<FeaturedDeal>> GetFeaturedDealsAsync(int count);
+    Task<bool> ExistsAsync(Guid id);
 }

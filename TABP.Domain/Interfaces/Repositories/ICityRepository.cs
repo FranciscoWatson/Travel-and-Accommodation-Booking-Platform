@@ -11,4 +11,5 @@ public interface ICityRepository
     Task UpdateAsync(City city);
     Task DeleteAsync(Guid id);
     Task<List<TrendingCity>> GetTrendingCities(int count);
+    Task<bool> ExistsAsync(Guid id);
 }

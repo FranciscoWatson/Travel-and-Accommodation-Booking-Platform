@@ -9,4 +9,5 @@ public interface ICountryRepository
     public Task<Country> CreateAsync(Country country);
     public Task UpdateAsync(Country country);
     public Task DeleteAsync(Guid id);
+    public Task<bool> ExistsAsync(Guid id);
 }

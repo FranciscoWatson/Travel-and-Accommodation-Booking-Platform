@@ -67,4 +67,9 @@ public class RoomRepository : IRoomRepository
             .Include(r => r.BookingRooms).ThenInclude(br => br.Booking)
             .ToListAsync();
     }
+    
+    public async Task<bool> ExistsAsync(Guid id)
+    {
+        return await _context.Rooms.AnyAsync(r => r.RoomId == id);
+    }
 }

@@ -11,4 +11,5 @@ public interface IRoomTypeRepository
     Task UpdateAsync(RoomType roomType);
     Task DeleteAsync(Guid id);
     Task<List<AvailableRoomTypes>> GetAvailableRoomTypesAsync(Guid hotelId, DateTime checkIn, DateTime checkOut);
+    Task<bool> ExistsAsync(Guid id);
 }

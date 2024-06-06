@@ -9,4 +9,5 @@ public interface IOwnerRepository
     public Task<Owner> CreateAsync(Owner owner);
     public Task UpdateAsync(Owner owner);
     public Task DeleteAsync(Guid id);
+    public Task<bool> ExistsAsync(Guid id);
 }

@@ -12,4 +12,5 @@ public interface IRoomRepository
     Task<List<Room>> GetAvailableRoomsByTypeIdAsync(Guid roomTypeId, DateTime checkIn, DateTime checkOut);
     Task<Room?> GetByIdAdminAsync(Guid roomId);
     Task<List<Room>> GetAllForAdminAsync();
+    Task<bool> ExistsAsync(Guid id);
 }

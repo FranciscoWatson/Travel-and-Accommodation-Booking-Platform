@@ -43,4 +43,9 @@ public class CountryRepository : ICountryRepository
         _context.Countries.Remove(country);
         await _context.SaveChangesAsync();
     }
+
+    public async Task<bool> ExistsAsync(Guid id)
+    {
+        return await _context.Countries.AnyAsync(c => c.CountryId == id);
+    }
 }

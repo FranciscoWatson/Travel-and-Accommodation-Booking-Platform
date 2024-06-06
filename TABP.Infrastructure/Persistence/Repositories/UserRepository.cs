@@ -79,4 +79,9 @@ public class UserRepository : IUserRepository
             .Include(u => u.UserRole)
             .FirstOrDefaultAsync(u => u.UserName == username && u.Password == password);
     }
+    
+    public async Task<bool> ExistsAsync(Guid id)
+    {
+        return await _context.Users.AnyAsync(u => u.UserId == id);
+    }
 }

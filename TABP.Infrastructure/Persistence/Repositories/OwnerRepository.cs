@@ -43,4 +43,9 @@ public class OwnerRepository : IOwnerRepository
         _context.Owners.Remove(owner);
         await _context.SaveChangesAsync();
     }
+    
+    public async Task<bool> ExistsAsync(Guid id)
+    {
+        return await _context.Owners.AnyAsync(o => o.OwnerId == id);
+    }
 }

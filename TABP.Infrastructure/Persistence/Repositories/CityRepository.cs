@@ -70,4 +70,9 @@ public class CityRepository : ICityRepository
 
         return trendingCities;
     }
+
+    public async Task<bool> ExistsAsync(Guid id)
+    {
+        return await _context.Cities.AnyAsync(c => c.CityId == id);
+    }
 }
