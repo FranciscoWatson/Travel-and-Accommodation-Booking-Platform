@@ -44,13 +44,13 @@ public class BookingsController : ControllerBase
     {
         var query = new GetBookingByIdQuery { BookingId = bookingId };
 
-        var booking = await _mediator.Send(query, cancellationToken);
+        var result = await _mediator.Send(query, cancellationToken);
         
-        if (booking == null)
+        if (!result.IsSuccess)
         {
-            return NotFound();
+            return NotFound(result.ErrorMessage);
         }
-        return Ok(booking);
+        return Ok(result.Data);
     }
     
     /// <summary>
@@ -78,8 +78,12 @@ public class BookingsController : ControllerBase
         
         var command = _mapper.Map<CreateBookingCommand>(createBookingRequestDto);
         
-        var booking = await _mediator.Send(command, cancellationToken);
-        
-        return CreatedAtAction(nameof(GetBooking), new { BookingId = booking.BookingId }, booking);
+        var result = await _mediator.Send(command, cancellationToken);
+        if (!result.IsSuccess)
+        {
+            return BadRequest(result.ErrorMessage);
+        }
+    
+        return CreatedAtAction(nameof(GetBooking), new { BookingId = result.Data.BookingId }, result.Data);
     }
 }

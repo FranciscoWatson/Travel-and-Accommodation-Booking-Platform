@@ -1,12 +1,13 @@
 using MediatR;
 using TABP.Application.Commands.Bookings;
 using TABP.Application.DTOs.BookingDTOs;
+using TABP.Application.Responses;
 using TABP.Domain.Entities;
 using TABP.Domain.Interfaces.Repositories;
 
 namespace TABP.Application.Handlers.Bookings;
 
-public class CreateBookingHandler : IRequestHandler<CreateBookingCommand, BookingDto>
+public class CreateBookingHandler : IRequestHandler<CreateBookingCommand, Result<BookingDto>>
 {
     private readonly IUserRepository _userRepository;
     private readonly IRoomTypeRepository _roomTypeRepository;
@@ -23,12 +24,12 @@ public class CreateBookingHandler : IRequestHandler<CreateBookingCommand, Bookin
         _bookingRepository = bookingRepository;
     }
 
-    public async Task<BookingDto> Handle(CreateBookingCommand request, CancellationToken cancellationToken)
+    public async Task<Result<BookingDto>> Handle(CreateBookingCommand request, CancellationToken cancellationToken)
     {
         var user = await _userRepository.GetByIdAsync(request.UserId);
         if (user == null)
         {
-            throw new InvalidOperationException("User not found.");
+            return Result<BookingDto>.Fail("User not found.");
         }
         
         var booking = new Booking
@@ -46,10 +47,15 @@ public class CreateBookingHandler : IRequestHandler<CreateBookingCommand, Bookin
         
         foreach (var roomTypeId in request.RoomTypeIds)
         {
+            var roomtype = await _roomTypeRepository.GetByIdAsync(roomTypeId);
+            if (roomtype == null)
+            {
+                return Result<BookingDto>.Fail("Room type not found.");
+            }
             var availableRooms = await _roomRepository.GetAvailableRoomsByTypeIdAsync(roomTypeId, request.CheckIn, request.CheckOut);
             if (availableRooms.Count == 0)
             {
-                throw new InvalidOperationException("No available rooms for the selected dates.");
+                return Result<BookingDto>.Fail("No available rooms for the selected dates.");
             }
 
             var room = availableRooms.First();
@@ -60,14 +66,17 @@ public class CreateBookingHandler : IRequestHandler<CreateBookingCommand, Bookin
                 Room = room
             });
 
-            var price = await CalculatePrice(room.RoomTypeId, request.CheckIn, request.CheckOut);
-            booking.PriceAtBooking += price;
+            var priceResult = await CalculatePrice(room.RoomTypeId, request.CheckIn, request.CheckOut);
+            if (!priceResult.IsSuccess)
+            {
+                return Result<BookingDto>.Fail(priceResult.ErrorMessage);
+            }
+            booking.PriceAtBooking += priceResult.Data;
         }
         
-
         await _bookingRepository.CreateAsync(booking);
         
-        return new BookingDto
+        return Result<BookingDto>.Success(new BookingDto
         {
             BookingId = booking.BookingId,
             UserId = booking.UserId,
@@ -76,24 +85,23 @@ public class CreateBookingHandler : IRequestHandler<CreateBookingCommand, Bookin
             SpecialRequest = booking.SpecialRequest,
             PaymentMethod = booking.Payment.PaymentMethod.ToString(),
             PriceAtBooking = booking.PriceAtBooking
-        };
+        });
     }
 
-    private async Task<decimal> CalculatePrice(Guid requestRoomTypeIds, DateTime requestCheckIn,
-        DateTime requestCheckOut)
+    private async Task<Result<decimal>> CalculatePrice(Guid roomTypeId, DateTime checkIn, DateTime checkOut)
     {
-        var roomType = await _roomTypeRepository.GetByIdAsync(requestRoomTypeIds);
+        var roomType = await _roomTypeRepository.GetByIdAsync(roomTypeId);
         if (roomType == null)
         {
-            throw new InvalidOperationException("Room type not found.");
+            return Result<decimal>.Fail("Room type not found.");
         }
         var price = roomType.Price;
-        var applicableDiscounts = await _discountRepository.GetActiveDiscountsByRoomTypeIdAsync(roomType.RoomTypeId, requestCheckIn, requestCheckOut);
+        var applicableDiscounts = await _discountRepository.GetActiveDiscountsByRoomTypeIdAsync(roomType.RoomTypeId, checkIn, checkOut);
         var maxDiscount = applicableDiscounts.MaxBy(d => d.Percentage);
         if (maxDiscount != null)
         {
             price -= price * (decimal)(maxDiscount.Percentage / 100.0);
         }
-        return price;
+        return Result<decimal>.Success(price);
     }
 }
