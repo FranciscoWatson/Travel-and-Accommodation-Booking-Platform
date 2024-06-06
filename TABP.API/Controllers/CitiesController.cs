@@ -76,7 +76,7 @@ public class CitiesController : ControllerBase
     /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
     /// <response code="200">Returns a list of trending cities.</response>
     /// <returns>A list of trending cities</returns>
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IEnumerable<TrendingCityResponseDto>), StatusCodes.Status200OK)]
     [HttpGet("trending")]
     [AllowAnonymous]
     public async Task<ActionResult<IEnumerable<TrendingCityResponseDto>>> GetTrendingCities(int count = 5,
