@@ -20,11 +20,12 @@ public class GetRecentlyVisitedHotelsHandler : IRequestHandler<GetRecentlyVisite
 
     public async Task<Result<List<RecentlyVisitedHotelResponseDto>>> Handle(GetRecentlyVisitedHotelsQuery request, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetByIdAsync(request.UserId);
-        if (user == null)
+        var userExists = await _userRepository.ExistsAsync(request.UserId);
+        if (!userExists)
         {
             return Result<List<RecentlyVisitedHotelResponseDto>>.Fail("User not found.");
         }
+        
         var recentlyVisitedHotels = await _userRepository.GetRecentlyVisitedHotelsAsync(request.UserId, request.Count);
         return Result<List<RecentlyVisitedHotelResponseDto>>.Success(_mapper.Map<List<RecentlyVisitedHotelResponseDto>>(recentlyVisitedHotels));
     }

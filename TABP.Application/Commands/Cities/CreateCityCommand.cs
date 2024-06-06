@@ -1,9 +1,10 @@
 using MediatR;
 using TABP.Application.DTOs.CityDTOs;
+using TABP.Application.Responses;
 
 namespace TABP.Application.Commands.Cities;
 
-public class CreateCityCommand : IRequest<CityForCreationResponseDto>
+public class CreateCityCommand : IRequest<Result<CityForCreationResponseDto>>
 {
     public string Name { get; init; }
     public string Description { get; init; }

@@ -23,8 +23,8 @@ public class CreateRoomCommandHandler : IRequestHandler<CreateRoomCommand, Resul
 
     public async Task<Result<RoomForCreationResponseDto>> Handle(CreateRoomCommand request, CancellationToken cancellationToken)
     {
-        var roomType = await _roomTypeRepository.GetByIdAsync(request.RoomTypeId);
-        if (roomType == null)
+        var roomTypeExists = await _roomTypeRepository.ExistsAsync(request.RoomTypeId);
+        if (!roomTypeExists)
         {
             return Result<RoomForCreationResponseDto>.Fail("Room type not found.");
         }

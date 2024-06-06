@@ -22,8 +22,8 @@ public class GetHotelRoomTypeHandler : IRequestHandler<GetHotelRoomTypesQuery, R
 
     public async Task<Result<List<RoomTypeWithDiscountResponseDto>>> Handle(GetHotelRoomTypesQuery request, CancellationToken cancellationToken)
     {
-        var hotel = await _hotelRepository.GetByIdAsync(request.HotelId);
-        if (hotel == null)
+        var hotelExists = await _hotelRepository.ExistsAsync(request.HotelId);
+        if (!hotelExists)
         {
             return Result<List<RoomTypeWithDiscountResponseDto>>.Fail("Hotel not found.");
         }

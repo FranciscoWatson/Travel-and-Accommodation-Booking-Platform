@@ -21,18 +21,18 @@ public class UpdateCityHandler : IRequestHandler<UpdateCityCommand, Result<objec
 
     public async Task<Result<object>> Handle(UpdateCityCommand request, CancellationToken cancellationToken)
     {
+        var countryExists = await _countryRepository.ExistsAsync(request.CountryId);
+        if (!countryExists)
+        {
+            return Result<object>.Fail("Country not found.");
+        }
+        
         var city = await _cityRepository.GetByIdAsync(request.CityId);
         if (city == null)
         {
             return Result<object>.Fail("City not found.");
         }
-    
-        var country = await _countryRepository.GetByIdAsync(request.CountryId);
-        if (country == null)
-        {
-            return Result<object>.Fail("Country not found.");
-        }
-    
+        
         _mapper.Map(request, city);
         await _cityRepository.UpdateAsync(city);
         return Result<object>.Success();

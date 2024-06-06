@@ -16,8 +16,8 @@ public class DeleteHotelHandler : IRequestHandler<DeleteHotelCommand, Result<obj
 
     public async Task<Result<object>> Handle(DeleteHotelCommand request, CancellationToken cancellationToken)
     {
-        var hotel = await _hotelRepository.GetByIdAsync(request.HotelId);
-        if (hotel == null)
+        var hotel = await _hotelRepository.ExistsAsync(request.HotelId);
+        if (!hotel)
         {
             return Result<object>.Fail("Hotel not found.");
         }

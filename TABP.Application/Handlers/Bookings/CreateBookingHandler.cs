@@ -47,8 +47,8 @@ public class CreateBookingHandler : IRequestHandler<CreateBookingCommand, Result
         
         foreach (var roomTypeId in request.RoomTypeIds)
         {
-            var roomtype = await _roomTypeRepository.GetByIdAsync(roomTypeId);
-            if (roomtype == null)
+            var roomTypeExists = await _roomTypeRepository.ExistsAsync(roomTypeId);
+            if (!roomTypeExists)
             {
                 return Result<BookingDto>.Fail("Room type not found.");
             }

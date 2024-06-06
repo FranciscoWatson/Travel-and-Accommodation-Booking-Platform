@@ -21,6 +21,5 @@ public class GetAllHotelsForAdminHandler : IRequestHandler<GetAllHotelsForAdminQ
     {
         var hotels = await _hotelRepository.GetAllForAdminAsync();
         return _mapper.Map<IEnumerable<HotelForAdminResponseDto>>(hotels);
-        
     }
 }

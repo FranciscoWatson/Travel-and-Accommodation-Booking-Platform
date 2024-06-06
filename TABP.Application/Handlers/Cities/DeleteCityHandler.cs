@@ -16,8 +16,8 @@ public class DeleteCityHandler : IRequestHandler<DeleteCityCommand, Result<objec
 
     public async Task<Result<object>> Handle(DeleteCityCommand request, CancellationToken cancellationToken)
     {
-        var city = await _cityRepository.GetByIdAsync(request.CityId);
-        if (city == null)
+        var cityExists = await _cityRepository.ExistsAsync(request.CityId);
+        if (!cityExists)
         {
             return Result<object>.Fail("City not found.");
         }

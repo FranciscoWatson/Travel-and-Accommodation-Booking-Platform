@@ -23,8 +23,8 @@ public class CreateHotelHandler : IRequestHandler<CreateHotelCommand, Result<Hot
 
     public async Task<Result<HotelForCreationResponseDto>> Handle(CreateHotelCommand request, CancellationToken cancellationToken)
     {
-        var owner = await _ownerRepository.GetByIdAsync(request.OwnerId);
-        if (owner == null)
+        var existsAsync = await _ownerRepository.ExistsAsync(request.OwnerId);
+        if (!existsAsync)
         {
             return Result<HotelForCreationResponseDto>.Fail("Owner not found.");
         }

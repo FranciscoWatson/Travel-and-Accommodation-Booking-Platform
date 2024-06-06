@@ -17,8 +17,8 @@ public class DeleteRoomHandler : IRequestHandler<DeleteRoomCommand, Result<objec
 
     public async Task<Result<object>> Handle(DeleteRoomCommand request, CancellationToken cancellationToken)
     {
-        var room = await _roomRepository.GetByIdAsync(request.RoomId);
-        if (room == null)
+        var roomExists = await _roomRepository.ExistsAsync(request.RoomId);
+        if (!roomExists)
         {
             return Result<object>.Fail("Room not found.");
         }

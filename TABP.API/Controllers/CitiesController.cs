@@ -111,9 +111,11 @@ public class CitiesController : ControllerBase
         }
         
         var command = _mapper.Map<CreateCityCommand>(cityForCreationRequestDto);
-        var city = await _mediator.Send(command, cancellationToken);
+        var result = await _mediator.Send(command, cancellationToken);
         
-        return CreatedAtAction(nameof(GetCity), new { cityId = city.CityId }, city);
+        return result.IsSuccess ? 
+            CreatedAtAction(nameof(GetCity), new { cityId = result.Data.CityId }, result.Data) 
+            : BadRequest(result.ErrorMessage);
     }
     
     
