@@ -28,9 +28,9 @@ public class RoomsController : ControllerBase
     {
         var query = new GetRoomByIdQuery() { RoomId = roomId };
         
-        var room = await _mediator.Send(query, cancellationToken);
-        
-        return Ok(room);
+        var result = await _mediator.Send(query, cancellationToken);
+
+        return result.IsSuccess ? Ok(result.Data) : NotFound(result.ErrorMessage);
     }
     
     [HttpGet]
@@ -50,9 +50,9 @@ public class RoomsController : ControllerBase
     {
         var command = new DeleteRoomCommand() { RoomId = roomId };
         
-        await _mediator.Send(command, cancellationToken);
-        
-        return NoContent();
+        var result = await _mediator.Send(command, cancellationToken);
+
+        return result.IsSuccess ? NoContent() : NotFound(result.ErrorMessage);
     }
     
     [HttpPost]
@@ -71,9 +71,11 @@ public class RoomsController : ControllerBase
         
         var command = _mapper.Map<CreateRoomCommand>(roomForCreationRequestDto);
         
-        var room = await _mediator.Send(command, cancellationToken);
+        var result = await _mediator.Send(command, cancellationToken);
         
-        return CreatedAtAction(nameof(GetRoom), new { roomId = room.RoomId }, room);
+        return result.IsSuccess ? 
+            CreatedAtAction(nameof(GetRoom), new { roomId = result.Data.RoomId }, result.Data) 
+            : BadRequest(result.ErrorMessage);
     }
     
     [HttpPut("{roomId}")]
@@ -90,8 +92,7 @@ public class RoomsController : ControllerBase
         
         var command = new UpdateRoomCommand { RoomId = roomId };
         _mapper.Map(roomForUpdateRequestDto, command);
-        await _mediator.Send(command, cancellationToken);
-        
-        return NoContent();
+        var result = await _mediator.Send(command, cancellationToken);
+        return result.IsSuccess ? NoContent() : BadRequest(result.ErrorMessage);
     }
 }
