@@ -39,8 +39,8 @@ public class UsersController : ControllerBase
         var query = new GetRecentlyVisitedHotelsQuery() { UserId = userId };
         _mapper.Map(recentlyVisitedHotelRequestDto, query);
         
-        var hotels = await _mediator.Send(query, cancellationToken);
+        var result = await _mediator.Send(query, cancellationToken);
         
-        return Ok(hotels);
+        return result.IsSuccess ? Ok(result.Data) : NotFound(result.ErrorMessage);
     }
 }
