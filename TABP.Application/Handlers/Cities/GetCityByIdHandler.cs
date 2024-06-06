@@ -2,11 +2,12 @@ using AutoMapper;
 using MediatR;
 using TABP.Application.DTOs.CityDTOs;
 using TABP.Application.Queries.Cities;
+using TABP.Application.Responses;
 using TABP.Domain.Interfaces.Repositories;
 
 namespace TABP.Application.Handlers.Cities;
 
-public class GetCityByIdHandler : IRequestHandler<GetCityByIdQuery, CityDto?>
+public class GetCityByIdHandler : IRequestHandler<GetCityByIdQuery, Result<CityDto>>
 {
     private readonly ICityRepository _cityRepository;
     private readonly IMapper _mapper;
@@ -17,9 +18,12 @@ public class GetCityByIdHandler : IRequestHandler<GetCityByIdQuery, CityDto?>
         _mapper = mapper;
     }
 
-    public async Task<CityDto?> Handle(GetCityByIdQuery request, CancellationToken cancellationToken)
+    public async Task<Result<CityDto>> Handle(GetCityByIdQuery request, CancellationToken cancellationToken)
     {
         var city = await _cityRepository.GetByIdAsync(request.CityId);
-        return city == null ? null : _mapper.Map<CityDto>(city);
+        
+        return city == null
+            ? Result<CityDto>.Fail("City not found.")
+            : Result<CityDto>.Success(_mapper.Map<CityDto>(city));
     }
 }

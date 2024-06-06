@@ -43,9 +43,9 @@ public class CitiesController : ControllerBase
     {
         var query = new GetCityByIdQuery { CityId = cityId };
         
-        var city = await _mediator.Send(query, cancellationToken);
-        
-        return city == null ? NotFound() : Ok(city);
+        var result = await _mediator.Send(query, cancellationToken);
+ 
+        return !result.IsSuccess ? NotFound(result.ErrorMessage) : Ok(result.Data);
     }
     
     /// <summary>
